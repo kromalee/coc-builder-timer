@@ -4,334 +4,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部落冲突升级计时器</title>
+    <meta name="description" content="部落冲突建筑工人升级计时器，帮助玩家管理建筑升级时间">
+    <meta name="keywords" content="部落冲突,COC,建筑工人,升级计时器,游戏工具">
+    <meta name="author" content="COC Timer">
+    
+    <!-- PWA相关meta标签 -->
+    <meta name="theme-color" content="#409EFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="COC计时器">
+    <meta name="msapplication-TileColor" content="#409EFF">
+    <meta name="msapplication-tap-highlight" content="no">
+    
+    <title>部落冲突建筑工人计时器</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- 图标链接 -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/icon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./assets/img/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./assets/img/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./assets/img/icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./assets/img/icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./assets/img/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./assets/img/icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="./assets/img/icon-57x57.png">
+    
+    <!-- 样式文件 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="./assets/css/main.css">
+    
     <style>
+        [v-cloak] { display: none !important; }
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-            background-color: #f5f5f5;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ebeef5;
-        }
-
-        .stats-row {
-            margin-bottom: 20px;
-        }
-
-        .upgrade-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border-left: 4px solid #409eff;
-        }
-
-        .upgrade-item.completed {
-            border-left-color: #67c23a;
-            background: #f0f9ff;
-        }
-
-        .item-info {
-            flex: 1;
-        }
-
-        .item-name {
-            font-weight: 600;
-            color: #303133;
-            margin-bottom: 4px;
-        }
-
-        .item-meta {
-            font-size: 12px;
-            color: #909399;
-        }
-
-        .item-time {
-            font-weight: 600;
-            color: #409eff;
-        }
-
-        .item-time.completed {
-            color: #67c23a;
-        }
-
-        .no-upgrades {
-            text-align: center;
-            padding: 40px;
-            color: #909399;
-        }
-
-        .player-tag {
-            display: inline-block;
-            background: #e1f3d8;
-            color: #67c23a;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 11px;
-            margin-right: 8px;
-        }
-
-        .category-tag {
-            display: inline-block;
-            background: #ecf5ff;
-            color: #409eff;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 11px;
-        }
-
-        .remark-input {
-            width: 120px;
-            margin-left: 10px;
-        }
-
-        .player-item {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        /* 版本信息样式 */
         .version-info {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ebeef5;
-            color: #909399;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
             font-size: 12px;
-        }
-
-        /* 移动端优化 */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                padding: 15px;
-                border-radius: 0;
-                margin: 0;
-            }
-
-            .header h1 {
-                font-size: 24px;
-                margin-bottom: 10px;
-            }
-
-            .header p {
-                font-size: 14px;
-                margin: 5px 0;
-            }
-
-            /* 统计卡片移动端优化 */
-            .stats-row .el-col {
-                margin-bottom: 10px;
-            }
-
-            .stats-row .el-card__header {
-                padding: 12px 15px;
-                font-size: 14px;
-            }
-
-            .stats-row .el-card__body {
-                padding: 15px;
-            }
-
-            .stats-row .el-card__body div {
-                font-size: 20px !important;
-            }
-
-            /* 玩家管理区域 */
-            .el-card__header {
-                padding: 12px 15px;
-                font-size: 16px;
-                font-weight: 600;
-            }
-
-            .el-card__body {
-                padding: 15px;
-            }
-
-            /* 按钮优化 */
-            .el-button {
-                padding: 10px 15px;
-                font-size: 14px;
-                margin-bottom: 8px;
-            }
-
-            /* 玩家列表移动端布局 */
-            .player-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 12px;
-                background: #f8f9fa;
-                border-radius: 6px;
-                margin-bottom: 12px;
-            }
-
-            .player-info {
-                width: 100%;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .remark-input {
-                width: 100%;
-                margin-left: 0;
-                margin-top: 8px;
-            }
-
-            .player-stats {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-                margin-top: 8px;
-                font-size: 13px;
-            }
-
-            .player-actions {
-                margin-top: 10px;
-                width: 100%;
-            }
-
-            .player-actions .el-button {
-                width: 100%;
-            }
-
-            /* 升级项目列表优化 */
-            .upgrade-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 15px;
-            }
-
-            .item-info {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .item-name {
-                font-size: 16px;
-                line-height: 1.4;
-            }
-
-            .item-meta {
-                margin-top: 8px;
-            }
-
-            .item-time {
-                font-size: 16px;
-                align-self: flex-end;
-            }
-
-            /* 标签优化 */
-            .player-tag,
-            .category-tag {
-                padding: 4px 8px;
-                font-size: 12px;
-                margin: 2px 4px 2px 0;
-            }
-
-            /* 输入框优化 */
-            .el-textarea__inner {
-                font-size: 14px;
-                padding: 12px;
-            }
-
-            /* 无升级项目提示 */
-            .no-upgrades {
-                padding: 30px 15px;
-            }
-
-            .no-upgrades i {
-                font-size: 36px !important;
-            }
-        }
-
-        /* 小屏幕进一步优化 */
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 20px;
-            }
-
-            .stats-row .el-card__body div {
-                font-size: 18px !important;
-            }
-
-            .item-name {
-                font-size: 15px;
-            }
-
-            .item-time {
-                font-size: 14px;
-            }
+            color: #999;
+            z-index: 1000;
         }
     </style>
 </head>
-
 <body>
-    <div id="app">
-        <div class="container">
-            <div class="header">
-                <h1>部落冲突升级计时器</h1>
-                <p>不登陆游戏，快速查看剩余升级时间！</p>
-                <p>注意：英雄大作战活动导致无法正确获取英雄升级时间</p>
-            </div>
+    <div id="app" v-cloak>
+        <el-container>
+            <el-main>
+                <!-- 头部区域 - 优化版本 -->
+                <el-card shadow="never"
+                    style="margin-bottom: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <el-row type="flex" justify="space-between" align="middle">
+                        <el-col :xs="16" :sm="18" :md="20">
+                            <div style="text-align: center;">
+                                <h1
+                                    style="margin: 0; font-size: 28px; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                                    COC计时器</h1>
+                                <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">快速查看剩余升级时间</p>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="6" :md="4">
+                            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+                                <el-tooltip content="使用帮助" placement="bottom">
+                                    <el-button icon="el-icon-question" circle size="medium" @click="showHelpDialog"
+                                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip content="玩家配置" placement="bottom">
+                                    <el-button icon="el-icon-setting" circle size="medium" @click="showConfigDialog"
+                                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">
+                                    </el-button>
+                                </el-tooltip>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </el-card>
 
-            <!-- 统计信息 -->
-            <el-row class="stats-row" :gutter="20">
-                <el-col :span="8" :xs="24" :sm="8">
-                    <el-card>
-                        <div slot="header">总玩家数</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #409eff;">{{ Object.keys(players).length
-                            }}</div>
-                    </el-card>
-                </el-col>
-                <el-col :span="8" :xs="24" :sm="8">
-                    <el-card>
-                        <div slot="header">总升级项目</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #e6a23c;">{{
-                            getAllUpgradingItems().length }}</div>
-                    </el-card>
-                </el-col>
-                <el-col :span="8" :xs="24" :sm="8">
-                    <el-card>
-                        <div slot="header">下次完成时间</div>
-                        <div style="font-size: 18px; font-weight: bold; color: #67c23a;">{{ getNextCompletionTime() }}
-                        </div>
-                    </el-card>
+                <!-- 统计信息 - 紧凑布局 -->
+                <el-card style="margin-bottom: 20px;">
+                    <el-row :gutter="20" type="flex" justify="space-around" align="middle">
+                        <el-col :span="6" style="text-align: center;">
+                            <div style="color: #909399; font-size: 14px; margin-bottom: 4px;">总玩家数</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #409eff;">{{
+                                Object.keys(players).length }}</div>
+                        </el-col>
+                        <el-col :span="6"  style="text-align: center;">
+                            <div style="color: #909399; font-size: 14px; margin-bottom: 4px;">升级项目</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #e6a23c;">{{
+                                getAllUpgradingItems().length }}</div>
+                        </el-col>
+                        <el-col :span="12" style="text-align: center;">
+                            <div style="color: #909399; font-size: 14px; margin-bottom: 4px;">最近完成时间</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #67c23a;">{{ getNextCompletionTime()
+                                }}</div>
+                        </el-col>
+                    </el-row>
+                </el-card>
+
+                <!-- 升级项目列表 -->
+                <el-card>
+                    <div slot="header">所有升级项目</div>
+                    <el-empty v-if="getAllUpgradingItems().length === 0" description="暂无升级项目">
+                        <el-icon name="info"></el-icon>
+                    </el-empty>
+                    <div v-else>
+                        <el-row v-for="item in getAllUpgradingItems()" :key="item.id" style="margin-bottom: 8px;">
+                            <el-card shadow="hover" :body-style="{ padding: '12px 16px' }">
+                                <el-row type="flex" justify="space-between" align="middle">
+                                    <el-col>
+                                        <div style="font-weight: 500; margin-bottom: 4px;">{{ item.displayName }} (Lv{{
+                                            item.lvl }})</div>
+                                        <div>
+                                            <el-tag size="mini" type="info" style="margin-right: 8px;">{{
+                                                playerRemarks[item.playerTag] || item.playerTag }}</el-tag>
+                                            <el-tag size="mini">{{ item.categoryName }}</el-tag>
+                                        </div>
+                                    </el-col>
+                                    <el-col style="text-align: right;">
+                                        <div
+                                            :style="{ fontWeight: '500', color: item.remainingTime <= 0 ? '#67c23a' : '#409eff' }">
+                                            {{ formatTime(item.remainingTime) }}
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </el-card>
+                        </el-row>
+                    </div>
+                </el-card>
+            </el-main>
+        </el-container>
+
+        <!-- 版本信息 -->
+        <div class="version-info">
+            <p>V.20250828-0236</p>
+        </div>
+
+        <!-- 帮助对话框 -->
+        <el-dialog title="使用帮助" :visible.sync="helpDialogVisible" center>
+            <el-row type="flex" justify="center">
+                <el-col style="text-align: center; padding: 20px;">
+                    <i class="el-icon-info" style="font-size: 48px; color: #409eff; margin-bottom: 16px;"></i>
+                    <h3 style="margin: 16px 0; color: #303133;">COC计时器</h3>
+                    <p style="margin: 12px 0; color: #606266; line-height: 1.6;">快速查看剩余升级时间！</p>
+                    <el-alert title="1. 获取数据的方式" type="warning" :closable="false" >
+                        <el-image src="./assets/img/setting.png" lazy></el-image>
+                    </el-alert>
+                    <el-alert title="2. 注意：英雄大作战活动导致无法正确获取英雄升级时间" type="warning" :closable="false" show-icon>
+                    </el-alert>
+
                 </el-col>
             </el-row>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="helpDialogVisible = false">知道了</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 配置对话框 -->
+        <el-dialog title="玩家配置" :visible.sync="configDialogVisible" top="5vh">
 
             <!-- 玩家管理 -->
             <el-card style="margin-bottom: 20px;">
@@ -339,505 +176,59 @@
                 <el-input v-model="jsonInput" type="textarea" :rows="4" placeholder="请粘贴玩家的JSON数据..."
                     style="margin-bottom: 10px;">
                 </el-input>
-                <el-button type="primary" @click="parseJsonData" :disabled="!jsonInput.trim()">解析数据</el-button>
-                <el-button @click="clearInput">清空输入</el-button>
+                <el-row :gutter="10">
+                    <el-col :span="12">
+                        <el-button type="primary" @click="parseJsonData" :disabled="!jsonInput.trim()"
+                            style="width: 100%;">解析数据</el-button>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-button @click="clearInput" style="width: 100%;">清空输入</el-button>
+                    </el-col>
+                </el-row>
             </el-card>
 
             <!-- 玩家列表 -->
-            <el-card v-if="Object.keys(players).length > 0" style="margin-bottom: 20px;">
+            <el-card v-if="Object.keys(players).length > 0">
                 <div slot="header">玩家列表</div>
-                <div v-for="(gameData, playerTag) in players" :key="playerTag" class="player-item">
-                    <div class="player-info">
-                        <el-tag>{{ playerTag }}</el-tag>
-                        <el-input v-model="playerRemarks[playerTag]" placeholder="添加备注" class="remark-input"
-                            size="small">
-                        </el-input>
-                    </div>
-                    <div class="player-stats">
-                        <span style="color: #909399;">升级项目: {{ getPlayerUpgradingCount(gameData) }}</span>
-                        <span style="color: #909399;">数据时间: {{ formatTimestamp(gameData.timestamp) }}</span>
-                    </div>
-                    <div class="player-actions">
-                        <el-button @click="removePlayer(playerTag)" type="danger" size="mini">删除</el-button>
-                    </div>
-                </div>
+                <el-row v-for="(gameData, playerTag) in players" :key="playerTag" style="margin-bottom: 12px;">
+                    <el-card shadow="hover" :body-style="{ padding: '15px' }">
+                        <el-row :gutter="10" type="flex" align="middle">
+                            <el-col :span="8">
+                                <el-tag>{{ playerTag }}</el-tag>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-input v-model="playerRemarks[playerTag]" placeholder="添加备注" size="small"></el-input>
+                            </el-col>
+                            <el-col :span="8" style="text-align: right;">
+                                <el-button @click="removePlayer(playerTag)" type="danger" size="mini">删除</el-button>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-top: 10px;">
+                            <el-col>
+                                <div style="font-size: 12px; color: #909399;">
+                                    升级项目: {{ getPlayerUpgradingCount(gameData) }} |
+                                    数据时间: {{ formatTimestamp(gameData.timestamp) }}
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-card>
+                </el-row>
             </el-card>
+            <el-empty v-else description="暂无玩家数据，请先添加玩家">
+                <el-icon name="user"></el-icon>
+            </el-empty>
 
-            <!-- 升级项目列表 -->
-            <el-card>
-                <div slot="header">所有升级项目 (按完成时间排序)</div>
-                <div v-if="getAllUpgradingItems().length === 0" class="no-upgrades">
-                    <i class="el-icon-info" style="font-size: 48px; margin-bottom: 16px;"></i>
-                    <p>暂无升级项目</p>
-                </div>
-                <div v-else>
-                    <div v-for="item in getAllUpgradingItems()" :key="item.id"
-                        :class="['upgrade-item', { completed: item.remainingTime <= 0 }]">
-                        <div class="item-info">
-                            <div class="item-name">{{ item.displayName }} (等级 {{ item.lvl }})</div>
-                            <div class="item-meta">
-                                <span class="player-tag">{{ playerRemarks[item.playerTag] || item.playerTag }}</span>
-                                <span class="category-tag">{{ item.categoryName }}</span>
-                            </div>
-                        </div>
-                        <div :class="['item-time', { completed: item.remainingTime <= 0 }]">
-                            {{ formatTime(item.remainingTime) }}
-                        </div>
-                    </div>
-                </div>
-            </el-card>
-        </div>
-
-        <!-- 版本信息 -->
-        <div class="version-info">
-            <p>V.20250827-2142</p>
-        </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="configDialogVisible = false">关闭</el-button>
+            </span>
+        </el-dialog>
     </div>
 
-    <script>
-        new Vue({
-            el: '#app',
-            data() {
-                return {
-                    players: {},
-                    playerRemarks: {},
-                    jsonInput: '',
-                    nameMap: {},
-                    currentTime: Date.now(),
-                    timer: null,
-                    // 所有可能包含升级项目的类别
-                    categories: ['buildings', 'traps', 'decos', 'obstacles', 'units', 'siege_machines', 'heroes', 'spells', 'pets', 'equipment', 'buildings2', 'traps2', 'decos2', 'obstacles2', 'units2', 'heroes2'],
-                    // 类别名称映射
-                    categoryNames: {
-                        buildings: '建筑',
-                        traps: '陷阱',
-                        decos: '装饰',
-                        obstacles: '障碍物',
-                        units: '兵种',
-                        siege_machines: '攻城机器',
-                        heroes: '英雄',
-                        spells: '法术',
-                        pets: '宠物',
-                        equipment: '装备',
-                        buildings2: '建筑2',
-                        traps2: '陷阱2',
-                        decos2: '装饰2',
-                        obstacles2: '障碍物2',
-                        units2: '兵种2',
-                        heroes2: '英雄2'
-                    }
-                };
-            },
-            methods: {
-                loadNameMap() {
-                    // 根据coc_info.json中的clashNo和nameZh字段完善的nameMap
-                    this.nameMap = {
-                        // 原有的映射保持不变
-                        // 1000008: "加农炮",
-                        // 1000009: "弓箭塔",
-                        // 1000013: "迫击炮",
-                        // 1000012: "防空炮",
-                        // 1000011: "法师塔",
-                        // 1000028: "空气炮",
-                        // 1000019: "隐形特斯拉",
-                        // 1000032: "炸弹塔",
-                        // 1000021: "X连弩",
-                        // 1000027: "地狱之塔",
-                        // 1000031: "鹰炮",
-                        // 1000067: "散射炮",
-                        // 1000015: "建筑工人小屋",
-                        // 1000072: "法术塔",
-                        // 1000077: "巨石阵",
-                        // 1000089: "喷火器",
-                        // 1000010: "城墙",
-                        // 1000084: "多重弓箭塔",
-                        // 1000085: "弹射加农炮",
-                        // 1000079: "多重齿轮塔",
-                        // 420: "大本营武器",
-                        // 12000000: "炸弹",
-                        // 12000001: "弹簧陷阱",
-                        // 12000002: "巨型炸弹",
-                        // 12000005: "空中炸弹",
-                        // 12000006: "追踪空雷",
-                        // 12000008: "骷髅陷阱",
-                        // 12000016: "龙卷风陷阱",
-                        // 12000020: "千兆炸弹",
-                        // 1000004: "金矿",
-                        // 1000002: "收集器",
-                        // 1000005: "金库",
-                        // 1000003: "圣水存储",
-                        // 1000023: "暗黑钻井",
-                        // 1000024: "暗黑存储",
-                        // 1000014: "部落城堡",
-                        // 1000000: "兵营",
-                        // 1000006: "兵营",
-                        // 1000026: "暗黑兵营",
-                        // 1000007: "实验室",
-                        // 1000020: "法术工厂",
-                        // 1000071: "英雄大厅",
-                        // 1000029: "暗黑法术工厂",
-                        // 1000070: "铁匠铺",
-                        // 1000059: "工作室",
-                        // 1000068: "宠物屋",
-                        // 1000001: "大本营",
-
-                        "1000000": "兵营",
-                        "1000001": "大本营",
-                        "1000001_12": "巨型特斯拉电磁塔",
-                        "1000001_13": "巨型地狱之塔",
-                        "1000001_14": "14本巨型地狱之塔",
-                        "1000001_15": "15本巨型地狱之塔",
-                        "1000001_16": "16本巨型地狱之塔",
-                        "1000001_17": "地狱火炮",
-                        "1000002": "圣水收集器",
-                        "1000003": "圣水瓶",
-                        "1000004": "金矿",
-                        "1000005": "储金罐",
-                        "1000006": "训练营",
-                        "1000007": "实验室",
-                        "1000008": "加农炮",
-                        "1000009": "箭塔",
-                        "1000011": "法师塔",
-                        "1000012": "防空火箭",
-                        "1000013": "迫击炮",
-                        "1000014": "部落城堡",
-                        "1000015": "建筑工人",
-                        "1000019": "特斯拉电磁塔",
-                        "1000020": "法术工厂",
-                        "1000021": "X连弩",
-                        "1000023": "暗黑重油钻井",
-                        "1000024": "暗黑重油罐",
-                        "1000026": "暗黑训练营",
-                        "1000027": "地狱之塔",
-                        "1000028": "空气炮",
-                        "1000029": "暗黑法术工厂",
-                        "1000030": "天鹰火炮",
-                        "1000032": "炸弹塔",
-                        "1000059": "攻城机器工坊",
-                        "1000067": "投石炮",
-                        "1000068": "战宠小屋",
-                        "1000070": "铁匠铺",
-                        "1000071": "英雄殿堂",
-                        "1000072": "法术塔",
-                        "1000077": "擎天巨柱",
-                        "1000079": "复合机械塔",
-                        "1000084": "多人箭塔",
-                        "1000085": "弹跳加农炮",
-                        "1000089": "火焰喷射器",
-                        "4000000": "野蛮人",
-                        "4000001": "弓箭手",
-                        "4000002": "哥布林",
-                        "4000003": "巨人",
-                        "4000004": "炸弹人",
-                        "4000005": "气球兵",
-                        "4000006": "法师",
-                        "4000007": "天使",
-                        "4000008": "飞龙",
-                        "4000009": "皮卡超人",
-                        "4000010": "亡灵",
-                        "4000011": "野猪骑士",
-                        "4000012": "瓦基丽",
-                        "4000013": "戈仑石人",
-                        "4000015": "女巫",
-                        "4000017": "熔岩猎犬",
-                        "4000022": "巨石投手",
-                        "4000023": "飞龙宝宝",
-                        "4000024": "掘地矿工",
-                        "4000051": "攻城战车",
-                        "4000052": "攻城飞艇",
-                        "4000053": "大雪怪",
-                        "4000058": "戈仑冰人",
-                        "4000059": "雷电飞龙",
-                        "4000062": "攻城气球",
-                        "4000065": "龙骑士",
-                        "4000075": "攻城训练营",
-                        "4000082": "英雄猎手",
-                        "4000087": "攻城滚木车",
-                        "4000091": "攻城烈焰车",
-                        "4000092": "攻城钻地机",
-                        "4000095": "雷电泰坦",
-                        "4000097": "守护者学徒",
-                        "4000110": "根蔓骑士",
-                        "4000123": "德鲁伊",
-                        "4000132": "巨矛投手",
-                        "4000135": "部队发射器",
-                        "4000150": "烈焰熔炉",
-                        "12000000": "隐形炸弹",
-                        "12000001": "隐形弹簧",
-                        "12000002": "巨型炸弹",
-                        "12000005": "空中炸弹",
-                        "12000006": "搜空地雷",
-                        "12000008": "骷髅陷阱",
-                        "12000016": "飓风陷阱",
-                        "12000020": "终极炸弹",
-                        "26000000": "雷电法术",
-                        "26000001": "治疗法术",
-                        "26000002": "狂暴法术",
-                        "26000003": "弹跳法术",
-                        "26000005": "冰冻法术",
-                        "26000009": "毒药法术",
-                        "26000010": "地震法术",
-                        "26000011": "急速法术",
-                        "26000016": "镜像法术",
-                        "26000017": "骷髅法术",
-                        "26000028": "蝙蝠法术",
-                        "26000035": "隐身法术",
-                        "26000053": "回溯法术",
-                        "26000070": "蔓生法术",
-                        "26000098": "复苏法术",
-                        "26000109": "冰障法术",
-                        "28000000": "野蛮人之王",
-                        "28000001": "弓箭女皇",
-                        "28000002": "大守护者",
-                        "28000004": "飞盾战神",
-                        "28000006": "亡灵王子",
-                        "73000000": "莱希",
-                        "73000001": "大牦",
-                        "73000002": "闪枭",
-                        "73000003": "独角",
-                        "73000004": "凤凰",
-                        "73000007": "猛蜥",
-                        "73000008": "地兽",
-                        "73000009": "冰牙",
-                        "73000010": "灵狐",
-                        "73000011": "愤怒水母",
-                        "73000016": "阿啾",
-                        "106000002": "弓箭手木偶",
-                        "106000008": "地震金靴",
-                        "106000009": "野猪骑士木偶",
-                        "106000010": "巨型手套",
-                        "106000011": "治疗胡须",
-                        "106000013": "火箭飞矛",
-                        "106000014": "尖刺足球",
-                        "106000015": "冰封箭矢",
-                        "106000020": "天使木偶",
-                        "106000022": "巨大火球",
-                        "106000024": "狂暴宝石",
-                        "106000032": "灵蛇手镯",
-                        "106000039": "克隆魔镜",
-                        "106000040": "雷电战靴",
-                        "106000041": "熔岩气球玩偶",
-                        "106000042": "护卫玩偶",
-                        "106000043": "暗黑魔球",
-                        "106000044": "铁甲短裤",
-                        "106000047": "贵族哑铃",
-                        "106000048": "动作人偶"
-                    };
-                },
-                getDisplayName(data) {
-                    if (!data) return '未知项目';
-                    return this.nameMap[data] || `ID: ${data}`;
-                },
-                parseJsonData() {
-                    if (!this.jsonInput.trim()) {
-                        this.$message.warning('请输入JSON数据');
-                        return;
-                    }
-
-                    try {
-                        const gameData = JSON.parse(this.jsonInput.trim());
-                        if (gameData.tag) {
-                            this.addPlayer(gameData.tag, gameData);
-                            this.jsonInput = '';
-                            this.$message.success(`玩家 ${gameData.tag} 数据解析成功！`);
-                        } else {
-                            this.$message.error('JSON数据缺少玩家标签(tag)字段！');
-                        }
-                    } catch (error) {
-                        this.$message.error('JSON格式错误，请检查数据格式！');
-                        console.error('JSON解析错误:', error);
-                    }
-                },
-                clearInput() {
-                    this.jsonInput = '';
-                },
-                addPlayer(tag, data) {
-                    this.$set(this.players, tag, data);
-                    if (!this.playerRemarks[tag]) {
-                        this.$set(this.playerRemarks, tag, '');
-                    }
-                },
-                removePlayer(tag) {
-                    this.$delete(this.players, tag);
-                    this.$delete(this.playerRemarks, tag);
-                },
-                getAllUpgradingItems() {
-                    const allItems = [];
-
-                    Object.keys(this.players).forEach(playerTag => {
-                        const gameData = this.players[playerTag];
-
-                        this.categories.forEach(category => {
-                            if (gameData[category]) {
-                                gameData[category].forEach((item, index) => {
-                                    if (item.timer) {
-                                        const endTime = gameData.timestamp * 1000 + item.timer * 1000;
-                                        const remainingTime = Math.max(0, endTime - this.currentTime);
-
-                                        allItems.push({
-                                            id: `${playerTag}_${category}_${index}`,
-                                            playerTag: playerTag,
-                                            category: category,
-                                            categoryName: this.categoryNames[category] || category,
-                                            displayName: this.getDisplayName(item.data),
-                                            lvl: item.lvl,
-                                            timer: item.timer,
-                                            remainingTime: remainingTime,
-                                            endTime: endTime
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    });
-
-                    return allItems.sort((a, b) => a.remainingTime - b.remainingTime);
-                },
-                getPlayerUpgradingCount(gameData) {
-                    let count = 0;
-                    this.categories.forEach(category => {
-                        if (gameData[category]) {
-                            gameData[category].forEach(item => {
-                                if (item.timer) count++;
-                            });
-                        }
-                    });
-                    return count;
-                },
-                getNextCompletionTime() {
-                    const items = this.getAllUpgradingItems();
-                    if (items.length === 0) return '无';
-
-                    const nextItem = items[0];
-                    if (nextItem.remainingTime <= 0) {
-                        return '有项目已完成';
-                    }
-
-                    return this.formatTime(nextItem.remainingTime);
-                },
-                saveToLocalStorage() {
-                    try {
-                        const data = {
-                            players: this.players,
-                            playerRemarks: this.playerRemarks,
-                            timestamp: Date.now()
-                        };
-                        localStorage.setItem('cocTimerData', JSON.stringify(data));
-                    } catch (error) {
-                        console.error('保存到localStorage失败:', error);
-                    }
-                },
-                loadFromLocalStorage() {
-                    try {
-                        const savedData = localStorage.getItem('cocTimerData');
-                        if (savedData) {
-                            const data = JSON.parse(savedData);
-                            this.players = data.players || {};
-                            this.playerRemarks = data.playerRemarks || {};
-                            this.$message.success('已从本地存储恢复数据');
-                        }
-                    } catch (error) {
-                        console.error('从localStorage加载失败:', error);
-                    }
-                },
-                formatTime(milliseconds) {
-                    if (milliseconds <= 0) return '已完成';
-
-                    const seconds = Math.floor(milliseconds / 1000);
-                    const days = Math.floor(seconds / 86400);
-                    const hours = Math.floor((seconds % 86400) / 3600);
-                    const minutes = Math.floor((seconds % 3600) / 60);
-                    const secs = seconds % 60;
-
-                    if (days > 0) {
-                        return `${days}天 ${hours}时 ${minutes}分`;
-                    } else if (hours > 0) {
-                        return `${hours}时 ${minutes}分 ${secs}秒`;
-                    } else if (minutes > 0) {
-                        return `${minutes}分 ${secs}秒`;
-                    } else {
-                        return `${secs}秒`;
-                    }
-                },
-                formatTimestamp(timestamp) {
-                    return new Date(timestamp * 1000).toLocaleString('zh-CN');
-                },
-                updateTimer() {
-                    this.currentTime = Date.now();
-                }
-            },
-            mounted() {
-                this.loadNameMap();
-                this.loadFromLocalStorage();
-                this.timer = setInterval(this.updateTimer, 1000);
-            },
-            beforeDestroy() {
-                if (this.timer) {
-                    clearInterval(this.timer);
-                }
-            },
-            watch: {
-                players: {
-                    handler() {
-                        this.saveToLocalStorage();
-                    },
-                    deep: true
-                },
-                playerRemarks: {
-                    handler() {
-                        this.saveToLocalStorage();
-                    },
-                    deep: true
-                }
-            }
-        });
-    </script>
-    
-    <!-- PWA Service Worker Registration -->
-    <script>
-        // 注册 Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then(registration => {
-                        console.log('Service Worker 注册成功:', registration.scope);
-                        
-                        // 检查更新
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    // 新的 Service Worker 已安装，提示用户刷新
-                                    if (confirm('应用有新版本可用，是否立即更新？')) {
-                                        newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                        window.location.reload();
-                                    }
-                                }
-                            });
-                        });
-                    })
-                    .catch(error => {
-                        console.log('Service Worker 注册失败:', error);
-                    });
-            });
-        }
-        
-        // 添加到主屏幕提示
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // 阻止默认的安装提示
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // 可以在这里显示自定义的安装按钮
-            console.log('PWA 可以安装');
-        });
-        
-        // 监听应用安装事件
-        window.addEventListener('appinstalled', (evt) => {
-            console.log('PWA 已安装');
-        });
-    </script>
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="./assets/data/namemap.js"></script>
+    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/pwa.js"></script>
 </body>
 
 </html>

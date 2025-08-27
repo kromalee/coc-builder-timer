@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// 读取coc_info.json文件
+// 读取coc_info.json文件并更新assets/data/namemap.js
 function extractNameMap() {
     try {
         // 读取coc_info.json文件
@@ -43,22 +43,19 @@ function extractNameMap() {
             return a[0].localeCompare(b[0]);
         });
         
-        // 生成JavaScript代码格式的nameMap
-        console.log('// 从coc_info.json自动提取的nameMap');
-        console.log('// 生成时间:', new Date().toLocaleString());
-        console.log('this.nameMap = {');
+        // 生成JavaScript代码格式的nameMap内容
+        const mapEntries = sortedEntries.map(([clashNo, nameZh]) => `  "${clashNo}": "${nameZh}"`).join(',\n');
         
-        sortedEntries.forEach(([clashNo, nameZh], index) => {
-            const comma = index < sortedEntries.length - 1 ? ',' : '';
-            console.log(`    "${clashNo}": "${nameZh}"${comma}`);
-        });
+        const outputContent = `// 部落冲突物品名称映射
+// 自动生成时间: ${new Date().toLocaleString()}
+window.COC_NAME_MAP = {
+${mapEntries}
+};
+`;
         
-        console.log('};');
-        
-        // 同时输出统计信息
-        console.log('');
-        console.log(`// 统计信息：`);
-        console.log(`// 总共提取了 ${sortedEntries.length} 个映射关系`);
+        // 写入到assets/data/namemap.js文件
+        const outputPath = path.join(__dirname, '..', 'assets', 'data', 'namemap.js');
+        fs.writeFileSync(outputPath, outputContent, 'utf8');
         
         // 按类型分组统计
         const typeStats = {};
@@ -67,7 +64,10 @@ function extractNameMap() {
             typeStats[prefix] = (typeStats[prefix] || 0) + 1;
         });
         
-        console.log('// 按类型分布：');
+        // 输出统计信息到控制台
+        console.log('✅ 成功更新 assets/data/namemap.js');
+        console.log(`📊 总共提取了 ${sortedEntries.length} 个映射关系`);
+        console.log('📋 按类型分布：');
         Object.entries(typeStats).forEach(([prefix, count]) => {
             let typeName = '未知类型';
             switch(prefix) {
@@ -79,18 +79,11 @@ function extractNameMap() {
                 case '106000': typeName = '装备'; break;
                 case '73000': typeName = '宠物'; break;
             }
-            console.log(`//   ${typeName}(${prefix}xxx): ${count} 个`);
+            console.log(`   ${typeName}(${prefix}xxx): ${count} 个`);
         });
         
-        // 将结果也保存到文件
-        const outputContent = `// 从coc_info.json自动提取的nameMap\n// 生成时间: ${new Date().toLocaleString()}\n\nconst nameMapData = {\n${sortedEntries.map(([clashNo, nameZh]) => `    "${clashNo}": "${nameZh}"`).join(',\n')}\n};\n\nmodule.exports = nameMapData;`;
-        
-        fs.writeFileSync('namemap_result.js', outputContent, 'utf8');
-        console.log('');
-        console.log('// 结果已保存到 namemap_result.js 文件中');
-        
     } catch (error) {
-        console.error('处理文件时出错:', error.message);
+        console.error('❌ 处理文件时出错:', error.message);
     }
 }
 

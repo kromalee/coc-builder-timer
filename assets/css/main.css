@@ -1,0 +1,224 @@
+/* CSS变量定义 - 保留，用于统一设计语言 */
+:root {
+  --primary-color: #409eff;
+  --success-color: #67c23a;
+  --warning-color: #e6a23c;
+  --danger-color: #f56c6c;
+  --text-primary: #303133;
+  --text-regular: #606266;
+  --text-secondary: #909399;
+  --border-color: #ebeef5;
+  --bg-color: #f5f5f5;
+  --white: #ffffff;
+  --shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --border-radius-small: 6px;
+}
+
+/* v-cloak 样式 - 防止Vue模板闪烁 */
+[v-cloak] {
+  display: none !important;
+}
+
+/* 基础样式 - 必要保留 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  background-color: var(--bg-color);
+  line-height: 1.6;
+}
+
+.el-card__body, .el-main {
+    padding: 5px;
+}
+
+/* 统一卡片样式 - 窄边距设计 */
+.el-card {
+  margin-bottom: 12px;
+}
+
+.el-card__header {
+  padding: 8px 12px !important;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.el-card__body {
+  padding: 12px !important;
+}
+
+/* 头部卡片特殊样式 */
+.el-card[style*="gradient"] .el-card__body {
+  padding: 16px 12px !important;
+}
+
+/* 统计卡片紧凑样式 */
+.el-card .el-row {
+  margin: 0 !important;
+}
+
+.el-card .el-col {
+  padding: 8px 4px;
+}
+
+/* 升级项目卡片内嵌样式 */
+.el-card .el-card {
+  margin-bottom: 8px;
+}
+
+.el-card .el-card:last-child {
+  margin-bottom: 0;
+}
+
+/* 版本信息样式 - 保留 */
+.version-info {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* 自定义标签样式 - 保留，Element UI没有提供 */
+.player-tag {
+  display: inline-block;
+  background: #e1f3d8;
+  color: var(--success-color);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  margin-right: 8px;
+}
+
+.category-tag {
+  display: inline-block;
+  background: #ecf5ff;
+  color: var(--primary-color);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* 移动端适配 - 必要保留 */
+@media (max-width: 768px) {
+  body {
+    padding: 8px;
+  }
+
+  /* 移动端卡片更紧凑 */
+  .el-card {
+    margin-bottom: 8px;
+  }
+
+  .el-card__header {
+    padding: 6px 10px !important;
+    font-size: 13px;
+  }
+
+  .el-card__body {
+    padding: 10px !important;
+  }
+
+  /* 头部卡片移动端样式 */
+  .el-card[style*="gradient"] .el-card__body {
+    padding: 12px 10px !important;
+  }
+
+  /* 统计区域移动端紧凑 */
+  .el-card .el-col {
+    padding: 6px 2px;
+  }
+
+  /* 移动端弹窗适配 - 必要的Element UI定制 */
+  .el-dialog {
+    width: 95% !important;
+    margin: 0 auto !important;
+    max-height: 90vh;
+  }
+  
+  .el-dialog__wrapper {
+    padding: 8px;
+  }
+  
+  .el-dialog__header {
+    padding: 10px 12px !important;
+  }
+  
+  .el-dialog__body {
+    padding: 8px 12px !important;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+  }
+  
+  .el-dialog__footer {
+    padding: 8px 12px !important;
+  }
+  
+  /* 弹窗内卡片样式 */
+  .el-dialog .el-card {
+    margin-bottom: 10px;
+  }
+  
+  .el-dialog .el-card__header {
+    padding: 6px 10px !important;
+  }
+  
+  .el-dialog .el-card__body {
+    padding: 8px 10px !important;
+  }
+  
+  /* 移动端按钮全宽显示 - 必要的响应式优化 */
+  .dialog-footer .el-button {
+    width: 100%;
+    margin: 4px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 5px;
+  }
+
+  /* 超小屏幕更紧凑 */
+  .el-card {
+    margin-bottom: 6px;
+  }
+
+  .el-card__header {
+    padding: 5px 8px !important;
+    font-size: 12px;
+  }
+
+  .el-card__body {
+    padding: 8px !important;
+  }
+
+  /* 超小屏幕弹窗进一步优化 */
+  .el-dialog {
+    width: 95% !important;
+  }
+  
+  .el-dialog__wrapper {
+    padding: 5px;
+  }
+  
+  .el-dialog__header {
+    padding: 8px 10px !important;
+  }
+  
+  .el-dialog__body {
+    padding: 6px 10px !important;
+    max-height: calc(90vh - 100px);
+  }
+  
+  .el-dialog__footer {
+    padding: 6px 10px !important;
+  }
+}

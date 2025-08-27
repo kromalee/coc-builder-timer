@@ -92,7 +92,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "兵种",
-					"clashNo": null
+					"clashNo": 4000041
 				},
 				{
 					"id": 242,
@@ -395,7 +395,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "其他",
-					"clashNo": null
+					"clashNo": 1000046
 				},
 				{
 					"id": 834,
@@ -440,7 +440,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "其他",
-					"clashNo": null
+					"clashNo": 1000036
 				},
 				{
 					"id": 917,
@@ -641,7 +641,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "防御",
-					"clashNo": null
+					"clashNo": 1000045
 				},
 				{
 					"id": 818,
