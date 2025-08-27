@@ -15,6 +15,7 @@
             font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
             background-color: #f5f5f5;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -23,15 +24,18 @@
             box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
+
         .header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #ebeef5;
         }
+
         .stats-row {
             margin-bottom: 20px;
         }
+
         .upgrade-item {
             display: flex;
             justify-content: space-between;
@@ -42,34 +46,42 @@
             border-radius: 6px;
             border-left: 4px solid #409eff;
         }
+
         .upgrade-item.completed {
             border-left-color: #67c23a;
             background: #f0f9ff;
         }
+
         .item-info {
             flex: 1;
         }
+
         .item-name {
             font-weight: 600;
             color: #303133;
             margin-bottom: 4px;
         }
+
         .item-meta {
             font-size: 12px;
             color: #909399;
         }
+
         .item-time {
             font-weight: 600;
             color: #409eff;
         }
+
         .item-time.completed {
             color: #67c23a;
         }
+
         .no-upgrades {
             text-align: center;
             padding: 40px;
             color: #909399;
         }
+
         .player-tag {
             display: inline-block;
             background: #e1f3d8;
@@ -79,6 +91,7 @@
             font-size: 11px;
             margin-right: 8px;
         }
+
         .category-tag {
             display: inline-block;
             background: #ecf5ff;
@@ -87,23 +100,26 @@
             border-radius: 3px;
             font-size: 11px;
         }
+
         .remark-input {
             width: 120px;
             margin-left: 10px;
         }
+
         .player-item {
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
         }
+
         .player-info {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         /* 版本信息样式 */
         .version-info {
             text-align: center;
@@ -113,58 +129,65 @@
             color: #909399;
             font-size: 12px;
         }
-        
+
         /* 移动端优化 */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
             }
+
             .container {
                 padding: 15px;
                 border-radius: 0;
                 margin: 0;
             }
+
             .header h1 {
                 font-size: 24px;
                 margin-bottom: 10px;
             }
+
             .header p {
                 font-size: 14px;
                 margin: 5px 0;
             }
-            
+
             /* 统计卡片移动端优化 */
             .stats-row .el-col {
                 margin-bottom: 10px;
             }
+
             .stats-row .el-card__header {
                 padding: 12px 15px;
                 font-size: 14px;
             }
+
             .stats-row .el-card__body {
                 padding: 15px;
             }
+
             .stats-row .el-card__body div {
                 font-size: 20px !important;
             }
-            
+
             /* 玩家管理区域 */
             .el-card__header {
                 padding: 12px 15px;
                 font-size: 16px;
                 font-weight: 600;
             }
+
             .el-card__body {
                 padding: 15px;
             }
-            
+
             /* 按钮优化 */
             .el-button {
                 padding: 10px 15px;
                 font-size: 14px;
                 margin-bottom: 8px;
             }
-            
+
             /* 玩家列表移动端布局 */
             .player-item {
                 flex-direction: column;
@@ -174,17 +197,20 @@
                 border-radius: 6px;
                 margin-bottom: 12px;
             }
+
             .player-info {
                 width: 100%;
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
             }
+
             .remark-input {
                 width: 100%;
                 margin-left: 0;
                 margin-top: 8px;
             }
+
             .player-stats {
                 display: flex;
                 flex-direction: column;
@@ -192,69 +218,80 @@
                 margin-top: 8px;
                 font-size: 13px;
             }
+
             .player-actions {
                 margin-top: 10px;
                 width: 100%;
             }
+
             .player-actions .el-button {
                 width: 100%;
             }
-            
+
             /* 升级项目列表优化 */
             .upgrade-item {
                 flex-direction: column;
                 align-items: flex-start;
                 padding: 15px;
             }
+
             .item-info {
                 width: 100%;
                 margin-bottom: 10px;
             }
+
             .item-name {
                 font-size: 16px;
                 line-height: 1.4;
             }
+
             .item-meta {
                 margin-top: 8px;
             }
+
             .item-time {
                 font-size: 16px;
                 align-self: flex-end;
             }
-            
+
             /* 标签优化 */
-            .player-tag, .category-tag {
+            .player-tag,
+            .category-tag {
                 padding: 4px 8px;
                 font-size: 12px;
                 margin: 2px 4px 2px 0;
             }
-            
+
             /* 输入框优化 */
             .el-textarea__inner {
                 font-size: 14px;
                 padding: 12px;
             }
-            
+
             /* 无升级项目提示 */
             .no-upgrades {
                 padding: 30px 15px;
             }
+
             .no-upgrades i {
                 font-size: 36px !important;
             }
         }
-        
+
         /* 小屏幕进一步优化 */
         @media (max-width: 480px) {
             .header h1 {
                 font-size: 20px;
             }
+
             .stats-row .el-card__body div {
                 font-size: 18px !important;
             }
+
             .item-name {
                 font-size: 15px;
             }
+
             .item-time {
                 font-size: 14px;
             }
@@ -276,19 +313,22 @@
                 <el-col :span="8" :xs="24" :sm="8">
                     <el-card>
                         <div slot="header">总玩家数</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #409eff;">{{ Object.keys(players).length }}</div>
+                        <div style="font-size: 24px; font-weight: bold; color: #409eff;">{{ Object.keys(players).length
+                            }}</div>
                     </el-card>
                 </el-col>
                 <el-col :span="8" :xs="24" :sm="8">
                     <el-card>
                         <div slot="header">总升级项目</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #e6a23c;">{{ getAllUpgradingItems().length }}</div>
+                        <div style="font-size: 24px; font-weight: bold; color: #e6a23c;">{{
+                            getAllUpgradingItems().length }}</div>
                     </el-card>
                 </el-col>
                 <el-col :span="8" :xs="24" :sm="8">
                     <el-card>
                         <div slot="header">下次完成时间</div>
-                        <div style="font-size: 18px; font-weight: bold; color: #67c23a;">{{ getNextCompletionTime() }}</div>
+                        <div style="font-size: 18px; font-weight: bold; color: #67c23a;">{{ getNextCompletionTime() }}
+                        </div>
                     </el-card>
                 </el-col>
             </el-row>
@@ -296,11 +336,7 @@
             <!-- 玩家管理 -->
             <el-card style="margin-bottom: 20px;">
                 <div slot="header">玩家管理</div>
-                <el-input
-                    v-model="jsonInput"
-                    type="textarea"
-                    :rows="4"
-                    placeholder="请粘贴玩家的JSON数据..."
+                <el-input v-model="jsonInput" type="textarea" :rows="4" placeholder="请粘贴玩家的JSON数据..."
                     style="margin-bottom: 10px;">
                 </el-input>
                 <el-button type="primary" @click="parseJsonData" :disabled="!jsonInput.trim()">解析数据</el-button>
@@ -313,10 +349,7 @@
                 <div v-for="(gameData, playerTag) in players" :key="playerTag" class="player-item">
                     <div class="player-info">
                         <el-tag>{{ playerTag }}</el-tag>
-                        <el-input
-                            v-model="playerRemarks[playerTag]"
-                            placeholder="添加备注"
-                            class="remark-input"
+                        <el-input v-model="playerRemarks[playerTag]" placeholder="添加备注" class="remark-input"
                             size="small">
                         </el-input>
                     </div>
@@ -338,7 +371,8 @@
                     <p>暂无升级项目</p>
                 </div>
                 <div v-else>
-                    <div v-for="item in getAllUpgradingItems()" :key="item.id" :class="['upgrade-item', { completed: item.remainingTime <= 0 }]">
+                    <div v-for="item in getAllUpgradingItems()" :key="item.id"
+                        :class="['upgrade-item', { completed: item.remainingTime <= 0 }]">
                         <div class="item-info">
                             <div class="item-name">{{ item.displayName }} (等级 {{ item.lvl }})</div>
                             <div class="item-meta">
@@ -353,7 +387,7 @@
                 </div>
             </el-card>
         </div>
-        
+
         <!-- 版本信息 -->
         <div class="version-info">
             <p>V.20250827-2142</p>
@@ -396,55 +430,198 @@
             },
             methods: {
                 loadNameMap() {
-                    // 直接嵌入map.json的内容
+                    // 根据coc_info.json中的clashNo和nameZh字段完善的nameMap
                     this.nameMap = {
-                        1000008: "加农炮",
-                        1000009: "弓箭塔",
-                        1000013: "迫击炮",
-                        1000012: "防空炮",
-                        1000011: "法师塔",
-                        1000028: "空气炮",
-                        1000019: "隐形特斯拉",
-                        1000032: "炸弹塔",
-                        1000021: "X连弩",
-                        1000027: "地狱之塔",
-                        1000031: "鹰炮",
-                        1000067: "散射炮",
-                        1000015: "建筑工人小屋",
-                        1000072: "法术塔",
-                        1000077: "巨石阵",
-                        1000089: "喷火器",
-                        1000010: "城墙",
-                        1000084: "多重弓箭塔",
-                        1000085: "弹射加农炮",
-                        1000079: "多重齿轮塔",
-                        420: "大本营武器",
-                        12000000: "炸弹",
-                        12000001: "弹簧陷阱",
-                        12000002: "巨型炸弹",
-                        12000005: "空中炸弹",
-                        12000006: "追踪空雷",
-                        12000008: "骷髅陷阱",
-                        12000016: "龙卷风陷阱",
-                        12000020: "千兆炸弹",
-                        1000004: "金矿",
-                        1000002: "收集器",
-                        1000005: "金库",
-                        1000003: "圣水存储",
-                        1000023: "暗黑钻井",
-                        1000024: "暗黑存储",
-                        1000014: "部落城堡",
-                        1000000: "兵营",
-                        1000006: "兵营",
-                        1000026: "暗黑兵营",
-                        1000007: "实验室",
-                        1000020: "法术工厂",
-                        1000071: "英雄大厅",
-                        1000029: "暗黑法术工厂",
-                        1000070: "铁匠铺",
-                        1000059: "工作室",
-                        1000068: "宠物屋",
-                        1000001: "大本营"
+                        // 原有的映射保持不变
+                        // 1000008: "加农炮",
+                        // 1000009: "弓箭塔",
+                        // 1000013: "迫击炮",
+                        // 1000012: "防空炮",
+                        // 1000011: "法师塔",
+                        // 1000028: "空气炮",
+                        // 1000019: "隐形特斯拉",
+                        // 1000032: "炸弹塔",
+                        // 1000021: "X连弩",
+                        // 1000027: "地狱之塔",
+                        // 1000031: "鹰炮",
+                        // 1000067: "散射炮",
+                        // 1000015: "建筑工人小屋",
+                        // 1000072: "法术塔",
+                        // 1000077: "巨石阵",
+                        // 1000089: "喷火器",
+                        // 1000010: "城墙",
+                        // 1000084: "多重弓箭塔",
+                        // 1000085: "弹射加农炮",
+                        // 1000079: "多重齿轮塔",
+                        // 420: "大本营武器",
+                        // 12000000: "炸弹",
+                        // 12000001: "弹簧陷阱",
+                        // 12000002: "巨型炸弹",
+                        // 12000005: "空中炸弹",
+                        // 12000006: "追踪空雷",
+                        // 12000008: "骷髅陷阱",
+                        // 12000016: "龙卷风陷阱",
+                        // 12000020: "千兆炸弹",
+                        // 1000004: "金矿",
+                        // 1000002: "收集器",
+                        // 1000005: "金库",
+                        // 1000003: "圣水存储",
+                        // 1000023: "暗黑钻井",
+                        // 1000024: "暗黑存储",
+                        // 1000014: "部落城堡",
+                        // 1000000: "兵营",
+                        // 1000006: "兵营",
+                        // 1000026: "暗黑兵营",
+                        // 1000007: "实验室",
+                        // 1000020: "法术工厂",
+                        // 1000071: "英雄大厅",
+                        // 1000029: "暗黑法术工厂",
+                        // 1000070: "铁匠铺",
+                        // 1000059: "工作室",
+                        // 1000068: "宠物屋",
+                        // 1000001: "大本营",
+
+                        "1000000": "兵营",
+                        "1000001": "大本营",
+                        "1000001_12": "巨型特斯拉电磁塔",
+                        "1000001_13": "巨型地狱之塔",
+                        "1000001_14": "14本巨型地狱之塔",
+                        "1000001_15": "15本巨型地狱之塔",
+                        "1000001_16": "16本巨型地狱之塔",
+                        "1000001_17": "地狱火炮",
+                        "1000002": "圣水收集器",
+                        "1000003": "圣水瓶",
+                        "1000004": "金矿",
+                        "1000005": "储金罐",
+                        "1000006": "训练营",
+                        "1000007": "实验室",
+                        "1000008": "加农炮",
+                        "1000009": "箭塔",
+                        "1000011": "法师塔",
+                        "1000012": "防空火箭",
+                        "1000013": "迫击炮",
+                        "1000014": "部落城堡",
+                        "1000015": "建筑工人",
+                        "1000019": "特斯拉电磁塔",
+                        "1000020": "法术工厂",
+                        "1000021": "X连弩",
+                        "1000023": "暗黑重油钻井",
+                        "1000024": "暗黑重油罐",
+                        "1000026": "暗黑训练营",
+                        "1000027": "地狱之塔",
+                        "1000028": "空气炮",
+                        "1000029": "暗黑法术工厂",
+                        "1000030": "天鹰火炮",
+                        "1000032": "炸弹塔",
+                        "1000059": "攻城机器工坊",
+                        "1000067": "投石炮",
+                        "1000068": "战宠小屋",
+                        "1000070": "铁匠铺",
+                        "1000071": "英雄殿堂",
+                        "1000072": "法术塔",
+                        "1000077": "擎天巨柱",
+                        "1000079": "复合机械塔",
+                        "1000084": "多人箭塔",
+                        "1000085": "弹跳加农炮",
+                        "1000089": "火焰喷射器",
+                        "4000000": "野蛮人",
+                        "4000001": "弓箭手",
+                        "4000002": "哥布林",
+                        "4000003": "巨人",
+                        "4000004": "炸弹人",
+                        "4000005": "气球兵",
+                        "4000006": "法师",
+                        "4000007": "天使",
+                        "4000008": "飞龙",
+                        "4000009": "皮卡超人",
+                        "4000010": "亡灵",
+                        "4000011": "野猪骑士",
+                        "4000012": "瓦基丽",
+                        "4000013": "戈仑石人",
+                        "4000015": "女巫",
+                        "4000017": "熔岩猎犬",
+                        "4000022": "巨石投手",
+                        "4000023": "飞龙宝宝",
+                        "4000024": "掘地矿工",
+                        "4000051": "攻城战车",
+                        "4000052": "攻城飞艇",
+                        "4000053": "大雪怪",
+                        "4000058": "戈仑冰人",
+                        "4000059": "雷电飞龙",
+                        "4000062": "攻城气球",
+                        "4000065": "龙骑士",
+                        "4000075": "攻城训练营",
+                        "4000082": "英雄猎手",
+                        "4000087": "攻城滚木车",
+                        "4000091": "攻城烈焰车",
+                        "4000092": "攻城钻地机",
+                        "4000095": "雷电泰坦",
+                        "4000097": "守护者学徒",
+                        "4000110": "根蔓骑士",
+                        "4000123": "德鲁伊",
+                        "4000132": "巨矛投手",
+                        "4000135": "部队发射器",
+                        "4000150": "烈焰熔炉",
+                        "12000000": "隐形炸弹",
+                        "12000001": "隐形弹簧",
+                        "12000002": "巨型炸弹",
+                        "12000005": "空中炸弹",
+                        "12000006": "搜空地雷",
+                        "12000008": "骷髅陷阱",
+                        "12000016": "飓风陷阱",
+                        "12000020": "终极炸弹",
+                        "26000000": "雷电法术",
+                        "26000001": "治疗法术",
+                        "26000002": "狂暴法术",
+                        "26000003": "弹跳法术",
+                        "26000005": "冰冻法术",
+                        "26000009": "毒药法术",
+                        "26000010": "地震法术",
+                        "26000011": "急速法术",
+                        "26000016": "镜像法术",
+                        "26000017": "骷髅法术",
+                        "26000028": "蝙蝠法术",
+                        "26000035": "隐身法术",
+                        "26000053": "回溯法术",
+                        "26000070": "蔓生法术",
+                        "26000098": "复苏法术",
+                        "26000109": "冰障法术",
+                        "28000000": "野蛮人之王",
+                        "28000001": "弓箭女皇",
+                        "28000002": "大守护者",
+                        "28000004": "飞盾战神",
+                        "28000006": "亡灵王子",
+                        "73000000": "莱希",
+                        "73000001": "大牦",
+                        "73000002": "闪枭",
+                        "73000003": "独角",
+                        "73000004": "凤凰",
+                        "73000007": "猛蜥",
+                        "73000008": "地兽",
+                        "73000009": "冰牙",
+                        "73000010": "灵狐",
+                        "73000011": "愤怒水母",
+                        "73000016": "阿啾",
+                        "106000002": "弓箭手木偶",
+                        "106000008": "地震金靴",
+                        "106000009": "野猪骑士木偶",
+                        "106000010": "巨型手套",
+                        "106000011": "治疗胡须",
+                        "106000013": "火箭飞矛",
+                        "106000014": "尖刺足球",
+                        "106000015": "冰封箭矢",
+                        "106000020": "天使木偶",
+                        "106000022": "巨大火球",
+                        "106000024": "狂暴宝石",
+                        "106000032": "灵蛇手镯",
+                        "106000039": "克隆魔镜",
+                        "106000040": "雷电战靴",
+                        "106000041": "熔岩气球玩偶",
+                        "106000042": "护卫玩偶",
+                        "106000043": "暗黑魔球",
+                        "106000044": "铁甲短裤",
+                        "106000047": "贵族哑铃",
+                        "106000048": "动作人偶"
                     };
                 },
                 getDisplayName(data) {
@@ -616,4 +793,5 @@
         });
     </script>
 </body>
+
 </html>
