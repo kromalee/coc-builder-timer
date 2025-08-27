@@ -91,6 +91,164 @@
             width: 120px;
             margin-left: 10px;
         }
+        .player-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .player-info {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+                border-radius: 0;
+                margin: 0;
+            }
+            .header h1 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            .header p {
+                font-size: 14px;
+                margin: 5px 0;
+            }
+            
+            /* 统计卡片移动端优化 */
+            .stats-row .el-col {
+                margin-bottom: 10px;
+            }
+            .stats-row .el-card__header {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            .stats-row .el-card__body {
+                padding: 15px;
+            }
+            .stats-row .el-card__body div {
+                font-size: 20px !important;
+            }
+            
+            /* 玩家管理区域 */
+            .el-card__header {
+                padding: 12px 15px;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            .el-card__body {
+                padding: 15px;
+            }
+            
+            /* 按钮优化 */
+            .el-button {
+                padding: 10px 15px;
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+            
+            /* 玩家列表移动端布局 */
+            .player-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px;
+                background: #f8f9fa;
+                border-radius: 6px;
+                margin-bottom: 12px;
+            }
+            .player-info {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .remark-input {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 8px;
+            }
+            .player-stats {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                margin-top: 8px;
+                font-size: 13px;
+            }
+            .player-actions {
+                margin-top: 10px;
+                width: 100%;
+            }
+            .player-actions .el-button {
+                width: 100%;
+            }
+            
+            /* 升级项目列表优化 */
+            .upgrade-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            .item-info {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .item-name {
+                font-size: 16px;
+                line-height: 1.4;
+            }
+            .item-meta {
+                margin-top: 8px;
+            }
+            .item-time {
+                font-size: 16px;
+                align-self: flex-end;
+            }
+            
+            /* 标签优化 */
+            .player-tag, .category-tag {
+                padding: 4px 8px;
+                font-size: 12px;
+                margin: 2px 4px 2px 0;
+            }
+            
+            /* 输入框优化 */
+            .el-textarea__inner {
+                font-size: 14px;
+                padding: 12px;
+            }
+            
+            /* 无升级项目提示 */
+            .no-upgrades {
+                padding: 30px 15px;
+            }
+            .no-upgrades i {
+                font-size: 36px !important;
+            }
+        }
+        
+        /* 小屏幕进一步优化 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            .stats-row .el-card__body div {
+                font-size: 18px !important;
+            }
+            .item-name {
+                font-size: 15px;
+            }
+            .item-time {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
@@ -105,19 +263,19 @@
 
             <!-- 统计信息 -->
             <el-row class="stats-row" :gutter="20">
-                <el-col :span="8">
+                <el-col :span="8" :xs="24" :sm="8">
                     <el-card>
                         <div slot="header">总玩家数</div>
                         <div style="font-size: 24px; font-weight: bold; color: #409eff;">{{ Object.keys(players).length }}</div>
                     </el-card>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="8" :xs="24" :sm="8">
                     <el-card>
                         <div slot="header">总升级项目</div>
                         <div style="font-size: 24px; font-weight: bold; color: #e6a23c;">{{ getAllUpgradingItems().length }}</div>
                     </el-card>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="8" :xs="24" :sm="8">
                     <el-card>
                         <div slot="header">下次完成时间</div>
                         <div style="font-size: 18px; font-weight: bold; color: #67c23a;">{{ getNextCompletionTime() }}</div>
@@ -142,17 +300,23 @@
             <!-- 玩家列表 -->
             <el-card v-if="Object.keys(players).length > 0" style="margin-bottom: 20px;">
                 <div slot="header">玩家列表</div>
-                <div v-for="(gameData, playerTag) in players" :key="playerTag" style="margin-bottom: 10px; display: flex; align-items: center;">
-                    <el-tag>{{ playerTag }}</el-tag>
-                    <el-input
-                        v-model="playerRemarks[playerTag]"
-                        placeholder="添加备注"
-                        class="remark-input"
-                        size="small">
-                    </el-input>
-                    <span style="margin-left: 15px; color: #909399;">升级项目: {{ getPlayerUpgradingCount(gameData) }}</span>
-                    <span style="margin-left: 15px; color: #909399;">数据时间: {{ formatTimestamp(gameData.timestamp) }}</span>
-                    <el-button @click="removePlayer(playerTag)" type="danger" size="mini" style="margin-left: 15px;">删除</el-button>
+                <div v-for="(gameData, playerTag) in players" :key="playerTag" class="player-item">
+                    <div class="player-info">
+                        <el-tag>{{ playerTag }}</el-tag>
+                        <el-input
+                            v-model="playerRemarks[playerTag]"
+                            placeholder="添加备注"
+                            class="remark-input"
+                            size="small">
+                        </el-input>
+                    </div>
+                    <div class="player-stats">
+                        <span style="color: #909399;">升级项目: {{ getPlayerUpgradingCount(gameData) }}</span>
+                        <span style="color: #909399;">数据时间: {{ formatTimestamp(gameData.timestamp) }}</span>
+                    </div>
+                    <div class="player-actions">
+                        <el-button @click="removePlayer(playerTag)" type="danger" size="mini">删除</el-button>
+                    </div>
                 </div>
             </el-card>
 
