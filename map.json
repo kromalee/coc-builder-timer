@@ -1,0 +1,257 @@
+[
+  {
+    "name": "Cannon",
+    "dataId": 1000008,
+    "nameCN": "加农炮"
+  },
+  {
+    "name": "Archer Tower",
+    "dataId": 1000009,
+    "nameCN": "弓箭塔"
+  },
+  {
+    "name": "Mortar",
+    "dataId": 1000013,
+    "nameCN": "迫击炮"
+  },
+  {
+    "name": "Air Defense",
+    "dataId": 1000012,
+    "nameCN": "防空炮"
+  },
+  {
+    "name": "Wizard Tower",
+    "dataId": 1000011,
+    "nameCN": "法师塔"
+  },
+  {
+    "name": "Air Sweeper",
+    "dataId": 1000028,
+    "nameCN": "空气炮"
+  },
+  {
+    "name": "Hidden Tesla",
+    "dataId": 1000019,
+    "nameCN": "隐形特斯拉"
+  },
+  {
+    "name": "Bomb Tower",
+    "dataId": 1000032,
+    "nameCN": "炸弹塔"
+  },
+  {
+    "name": "X-Bow",
+    "dataId": 1000021,
+    "nameCN": "X连弩"
+  },
+  {
+    "name": "Inferno Tower",
+    "dataId": 1000027,
+    "nameCN": "地狱之塔"
+  },
+  {
+    "name": "Eagle Artillery",
+    "dataId": 1000031,
+    "nameCN": "鹰炮"
+  },
+  {
+    "name": "Scattershot",
+    "dataId": 1000067,
+    "nameCN": "散射炮"
+  },
+  {
+    "name": "Builders Hut",
+    "dataId": 1000015,
+    "nameCN": "建筑工人小屋"
+  },
+  {
+    "name": "Spell Tower",
+    "dataId": 1000072,
+    "nameCN": "法术塔"
+  },
+  {
+    "name": "Monolith",
+    "dataId": 1000077,
+    "nameCN": "巨石阵"
+  },
+  {
+    "name": "Firespitter",
+    "dataId": 1000089,
+    "nameCN": "喷火器"
+  },
+  {
+    "name": "Wall",
+    "dataId": 1000010,
+    "nameCN": "城墙"
+  },
+  {
+    "name": "Multi-Archer Tower",
+    "dataId": 1000084,
+    "nameCN": "多重弓箭塔"
+  },
+  {
+    "name": "Ricochet Cannon",
+    "dataId": 1000085,
+    "nameCN": "弹射加农炮"
+  },
+  {
+    "name": "Multi-Gear Tower",
+    "dataId": 1000079,
+    "nameCN": "多重齿轮塔"
+  },
+  {
+    "name": "TH12 Weapon",
+    "dataId": 420,
+    "nameCN": "12本武器"
+  },
+  {
+    "name": "TH13 Weapon",
+    "dataId": 420,
+    "nameCN": "13本武器"
+  },
+  {
+    "name": "TH14 Weapon",
+    "dataId": 420,
+    "nameCN": "14本武器"
+  },
+  {
+    "name": "TH15 Weapon",
+    "dataId": 420,
+    "nameCN": "15本武器"
+  },
+  {
+    "name": "TH17 Weapon",
+    "dataId": 420,
+    "nameCN": "17本武器"
+  },
+  {
+    "name": "Bomb",
+    "dataId": 12000000,
+    "nameCN": "炸弹"
+  },
+  {
+    "name": "Spring Trap",
+    "dataId": 12000001,
+    "nameCN": "弹簧陷阱"
+  },
+  {
+    "name": "Giant Bomb",
+    "dataId": 12000002,
+    "nameCN": "巨型炸弹"
+  },
+  {
+    "name": "Air Bomb",
+    "dataId": 12000005,
+    "nameCN": "空中炸弹"
+  },
+  {
+    "name": "Seeking Air Mine",
+    "dataId": 12000006,
+    "nameCN": "追踪空雷"
+  },
+  {
+    "name": "Skeleton Trap",
+    "dataId": 12000008,
+    "nameCN": "骷髅陷阱"
+  },
+  {
+    "name": "Tornado Trap",
+    "dataId": 12000016,
+    "nameCN": "龙卷风陷阱"
+  },
+  {
+    "name": "Giga Bomb",
+    "dataId": 12000020,
+    "nameCN": "千兆炸弹"
+  },
+  {
+    "name": "Gold Mine",
+    "dataId": 1000004,
+    "nameCN": "金矿"
+  },
+  {
+    "name": "Elixir Collector",
+    "dataId": 1000002,
+    "nameCN": "收集器"
+  },
+  {
+    "name": "Gold Storage",
+    "dataId": 1000005,
+    "nameCN": "金库"
+  },
+  {
+    "name": "Elixir Storage",
+    "dataId": 1000003,
+    "nameCN": "圣水存储"
+  },
+  {
+    "name": "Dark Elixir Drill",
+    "dataId": 1000023,
+    "nameCN": "暗黑钻井"
+  },
+  {
+    "name": "Dark Elixir Storage",
+    "dataId": 1000024,
+    "nameCN": "暗黑存储"
+  },
+  {
+    "name": "Clan Castle",
+    "dataId": 1000014,
+    "nameCN": "部落城堡"
+  },
+  {
+    "name": "Army Camp",
+    "dataId": 1000000,
+    "nameCN": "兵营"
+  },
+  {
+    "name": "Barracks",
+    "dataId": 1000006,
+    "nameCN": "兵营"
+  },
+  {
+    "name": "Dark Barracks",
+    "dataId": 1000026,
+    "nameCN": "暗黑兵营"
+  },
+  {
+    "name": "Laboratory",
+    "dataId": 1000007,
+    "nameCN": "实验室"
+  },
+  {
+    "name": "Spell Factory",
+    "dataId": 1000020,
+    "nameCN": "法术工厂"
+  },
+  {
+    "name": "Hero Hall",
+    "dataId": 1000071,
+    "nameCN": "英雄大厅"
+  },
+  {
+    "name": "Dark Spell Factory",
+    "dataId": 1000029,
+    "nameCN": "暗黑法术工厂"
+  },
+  {
+    "name": "Blacksmith",
+    "dataId": 1000070,
+    "nameCN": "铁匠铺"
+  },
+  {
+    "name": "Workshop",
+    "dataId": 1000059,
+    "nameCN": "工作室"
+  },
+  {
+    "name": "Pet House",
+    "dataId": 1000068,
+    "nameCN": "宠物屋"
+  },
+  {
+    "name": "Town Hall",
+    "dataId": 1000001,
+    "nameCN": "大本营"
+  }
+]
