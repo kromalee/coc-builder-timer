@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部落冲突升级计时器</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ebeef5;
+        }
+        .stats-row {
+            margin-bottom: 20px;
+        }
+        .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #409eff;
+        }
+        .upgrade-item.completed {
+            border-left-color: #67c23a;
+            background: #f0f9ff;
+        }
+        .item-info {
+            flex: 1;
+        }
+        .item-name {
+            font-weight: 600;
+            color: #303133;
+            margin-bottom: 4px;
+        }
+        .item-meta {
+            font-size: 12px;
+            color: #909399;
+        }
+        .item-time {
+            font-weight: 600;
+            color: #409eff;
+        }
+        .item-time.completed {
+            color: #67c23a;
+        }
+        .no-upgrades {
+            text-align: center;
+            padding: 40px;
+            color: #909399;
+        }
+        .player-tag {
+            display: inline-block;
+            background: #e1f3d8;
+            color: #67c23a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+        .category-tag {
+            display: inline-block;
+            background: #ecf5ff;
+            color: #409eff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        .remark-input {
+            width: 120px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="header">
+                <h1>部落冲突升级计时器</h1>
+                <p>不登陆游戏，快速查看剩余升级时间！</p>
+                <p>注意：英雄大作战活动导致无法正确获取英雄升级时间</p>
+            </div>
+
+            <!-- 统计信息 -->
+            <el-row class="stats-row" :gutter="20">
+                <el-col :span="8">
+                    <el-card>
+                        <div slot="header">总玩家数</div>
+                        <div style="font-size: 24px; font-weight: bold; color: #409eff;">{{ Object.keys(players).length }}</div>
+                    </el-card>
+                </el-col>
+                <el-col :span="8">
+                    <el-card>
+                        <div slot="header">总升级项目</div>
+                        <div style="font-size: 24px; font-weight: bold; color: #e6a23c;">{{ getAllUpgradingItems().length }}</div>
+                    </el-card>
+                </el-col>
+                <el-col :span="8">
+                    <el-card>
+                        <div slot="header">下次完成时间</div>
+                        <div style="font-size: 18px; font-weight: bold; color: #67c23a;">{{ getNextCompletionTime() }}</div>
+                    </el-card>
+                </el-col>
+            </el-row>
+
+            <!-- 玩家管理 -->
+            <el-card style="margin-bottom: 20px;">
+                <div slot="header">玩家管理</div>
+                <el-input
+                    v-model="jsonInput"
+                    type="textarea"
+                    :rows="4"
+                    placeholder="请粘贴玩家的JSON数据..."
+                    style="margin-bottom: 10px;">
+                </el-input>
+                <el-button type="primary" @click="parseJsonData" :disabled="!jsonInput.trim()">解析数据</el-button>
+                <el-button @click="clearInput">清空输入</el-button>
+            </el-card>
+
+            <!-- 玩家列表 -->
+            <el-card v-if="Object.keys(players).length > 0" style="margin-bottom: 20px;">
+                <div slot="header">玩家列表</div>
+                <div v-for="(gameData, playerTag) in players" :key="playerTag" style="margin-bottom: 10px; display: flex; align-items: center;">
+                    <el-tag>{{ playerTag }}</el-tag>
+                    <el-input
+                        v-model="playerRemarks[playerTag]"
+                        placeholder="添加备注"
+                        class="remark-input"
+                        size="small">
+                    </el-input>
+                    <span style="margin-left: 15px; color: #909399;">升级项目: {{ getPlayerUpgradingCount(gameData) }}</span>
+                    <span style="margin-left: 15px; color: #909399;">数据时间: {{ formatTimestamp(gameData.timestamp) }}</span>
+                    <el-button @click="removePlayer(playerTag)" type="danger" size="mini" style="margin-left: 15px;">删除</el-button>
+                </div>
+            </el-card>
+
+            <!-- 升级项目列表 -->
+            <el-card>
+                <div slot="header">所有升级项目 (按完成时间排序)</div>
+                <div v-if="getAllUpgradingItems().length === 0" class="no-upgrades">
+                    <i class="el-icon-info" style="font-size: 48px; margin-bottom: 16px;"></i>
+                    <p>暂无升级项目</p>
+                </div>
+                <div v-else>
+                    <div v-for="item in getAllUpgradingItems()" :key="item.id" :class="['upgrade-item', { completed: item.remainingTime <= 0 }]">
+                        <div class="item-info">
+                            <div class="item-name">{{ item.displayName }} (等级 {{ item.lvl }})</div>
+                            <div class="item-meta">
+                                <span class="player-tag">{{ playerRemarks[item.playerTag] || item.playerTag }}</span>
+                                <span class="category-tag">{{ item.categoryName }}</span>
+                            </div>
+                        </div>
+                        <div :class="['item-time', { completed: item.remainingTime <= 0 }]">
+                            {{ formatTime(item.remainingTime) }}
+                        </div>
+                    </div>
+                </div>
+            </el-card>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    players: {},
+                    playerRemarks: {},
+                    jsonInput: '',
+                    nameMap: {},
+                    currentTime: Date.now(),
+                    timer: null,
+                    // 所有可能包含升级项目的类别
+                    categories: ['buildings', 'traps', 'decos', 'obstacles', 'units', 'siege_machines', 'heroes', 'spells', 'pets', 'equipment', 'buildings2', 'traps2', 'decos2', 'obstacles2', 'units2', 'heroes2'],
+                    // 类别名称映射
+                    categoryNames: {
+                        buildings: '建筑',
+                        traps: '陷阱',
+                        decos: '装饰',
+                        obstacles: '障碍物',
+                        units: '兵种',
+                        siege_machines: '攻城机器',
+                        heroes: '英雄',
+                        spells: '法术',
+                        pets: '宠物',
+                        equipment: '装备',
+                        buildings2: '建筑2',
+                        traps2: '陷阱2',
+                        decos2: '装饰2',
+                        obstacles2: '障碍物2',
+                        units2: '兵种2',
+                        heroes2: '英雄2'
+                    }
+                };
+            },
+            methods: {
+                loadNameMap() {
+                    // 直接嵌入map.json的内容
+                    this.nameMap = {
+                        1000008: "加农炮",
+                        1000009: "弓箭塔",
+                        1000013: "迫击炮",
+                        1000012: "防空炮",
+                        1000011: "法师塔",
+                        1000028: "空气炮",
+                        1000019: "隐形特斯拉",
+                        1000032: "炸弹塔",
+                        1000021: "X连弩",
+                        1000027: "地狱之塔",
+                        1000031: "鹰炮",
+                        1000067: "散射炮",
+                        1000015: "建筑工人小屋",
+                        1000072: "法术塔",
+                        1000077: "巨石阵",
+                        1000089: "喷火器",
+                        1000010: "城墙",
+                        1000084: "多重弓箭塔",
+                        1000085: "弹射加农炮",
+                        1000079: "多重齿轮塔",
+                        420: "大本营武器",
+                        12000000: "炸弹",
+                        12000001: "弹簧陷阱",
+                        12000002: "巨型炸弹",
+                        12000005: "空中炸弹",
+                        12000006: "追踪空雷",
+                        12000008: "骷髅陷阱",
+                        12000016: "龙卷风陷阱",
+                        12000020: "千兆炸弹",
+                        1000004: "金矿",
+                        1000002: "收集器",
+                        1000005: "金库",
+                        1000003: "圣水存储",
+                        1000023: "暗黑钻井",
+                        1000024: "暗黑存储",
+                        1000014: "部落城堡",
+                        1000000: "兵营",
+                        1000006: "兵营",
+                        1000026: "暗黑兵营",
+                        1000007: "实验室",
+                        1000020: "法术工厂",
+                        1000071: "英雄大厅",
+                        1000029: "暗黑法术工厂",
+                        1000070: "铁匠铺",
+                        1000059: "工作室",
+                        1000068: "宠物屋",
+                        1000001: "大本营"
+                    };
+                },
+                getDisplayName(data) {
+                    if (!data) return '未知项目';
+                    return this.nameMap[data] || `ID: ${data}`;
+                },
+                parseJsonData() {
+                    if (!this.jsonInput.trim()) {
+                        this.$message.warning('请输入JSON数据');
+                        return;
+                    }
+
+                    try {
+                        const gameData = JSON.parse(this.jsonInput.trim());
+                        if (gameData.tag) {
+                            this.addPlayer(gameData.tag, gameData);
+                            this.jsonInput = '';
+                            this.$message.success(`玩家 ${gameData.tag} 数据解析成功！`);
+                        } else {
+                            this.$message.error('JSON数据缺少玩家标签(tag)字段！');
+                        }
+                    } catch (error) {
+                        this.$message.error('JSON格式错误，请检查数据格式！');
+                        console.error('JSON解析错误:', error);
+                    }
+                },
+                clearInput() {
+                    this.jsonInput = '';
+                },
+                addPlayer(tag, data) {
+                    this.$set(this.players, tag, data);
+                    if (!this.playerRemarks[tag]) {
+                        this.$set(this.playerRemarks, tag, '');
+                    }
+                },
+                removePlayer(tag) {
+                    this.$delete(this.players, tag);
+                    this.$delete(this.playerRemarks, tag);
+                },
+                getAllUpgradingItems() {
+                    const allItems = [];
+
+                    Object.keys(this.players).forEach(playerTag => {
+                        const gameData = this.players[playerTag];
+
+                        this.categories.forEach(category => {
+                            if (gameData[category]) {
+                                gameData[category].forEach((item, index) => {
+                                    if (item.timer) {
+                                        const endTime = gameData.timestamp * 1000 + item.timer * 1000;
+                                        const remainingTime = Math.max(0, endTime - this.currentTime);
+
+                                        allItems.push({
+                                            id: `${playerTag}_${category}_${index}`,
+                                            playerTag: playerTag,
+                                            category: category,
+                                            categoryName: this.categoryNames[category] || category,
+                                            displayName: this.getDisplayName(item.data),
+                                            lvl: item.lvl,
+                                            timer: item.timer,
+                                            remainingTime: remainingTime,
+                                            endTime: endTime
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    });
+
+                    return allItems.sort((a, b) => a.remainingTime - b.remainingTime);
+                },
+                getPlayerUpgradingCount(gameData) {
+                    let count = 0;
+                    this.categories.forEach(category => {
+                        if (gameData[category]) {
+                            gameData[category].forEach(item => {
+                                if (item.timer) count++;
+                            });
+                        }
+                    });
+                    return count;
+                },
+                getNextCompletionTime() {
+                    const items = this.getAllUpgradingItems();
+                    if (items.length === 0) return '无';
+
+                    const nextItem = items[0];
+                    if (nextItem.remainingTime <= 0) {
+                        return '有项目已完成';
+                    }
+
+                    return this.formatTime(nextItem.remainingTime);
+                },
+                saveToLocalStorage() {
+                    try {
+                        const data = {
+                            players: this.players,
+                            playerRemarks: this.playerRemarks,
+                            timestamp: Date.now()
+                        };
+                        localStorage.setItem('cocTimerData', JSON.stringify(data));
+                    } catch (error) {
+                        console.error('保存到localStorage失败:', error);
+                    }
+                },
+                loadFromLocalStorage() {
+                    try {
+                        const savedData = localStorage.getItem('cocTimerData');
+                        if (savedData) {
+                            const data = JSON.parse(savedData);
+                            this.players = data.players || {};
+                            this.playerRemarks = data.playerRemarks || {};
+                            this.$message.success('已从本地存储恢复数据');
+                        }
+                    } catch (error) {
+                        console.error('从localStorage加载失败:', error);
+                    }
+                },
+                formatTime(milliseconds) {
+                    if (milliseconds <= 0) return '已完成';
+
+                    const seconds = Math.floor(milliseconds / 1000);
+                    const days = Math.floor(seconds / 86400);
+                    const hours = Math.floor((seconds % 86400) / 3600);
+                    const minutes = Math.floor((seconds % 3600) / 60);
+                    const secs = seconds % 60;
+
+                    if (days > 0) {
+                        return `${days}天 ${hours}时 ${minutes}分`;
+                    } else if (hours > 0) {
+                        return `${hours}时 ${minutes}分 ${secs}秒`;
+                    } else if (minutes > 0) {
+                        return `${minutes}分 ${secs}秒`;
+                    } else {
+                        return `${secs}秒`;
+                    }
+                },
+                formatTimestamp(timestamp) {
+                    return new Date(timestamp * 1000).toLocaleString('zh-CN');
+                },
+                updateTimer() {
+                    this.currentTime = Date.now();
+                }
+            },
+            mounted() {
+                this.loadNameMap();
+                this.loadFromLocalStorage();
+                this.timer = setInterval(this.updateTimer, 1000);
+            },
+            beforeDestroy() {
+                if (this.timer) {
+                    clearInterval(this.timer);
+                }
+            },
+            watch: {
+                players: {
+                    handler() {
+                        this.saveToLocalStorage();
+                    },
+                    deep: true
+                },
+                playerRemarks: {
+                    handler() {
+                        this.saveToLocalStorage();
+                    },
+                    deep: true
+                }
+            }
+        });
+    </script>
+</body>
+</html>
