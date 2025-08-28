@@ -1,15 +1,16 @@
-# 部落冲突建筑工人计时器 (COC Builder Timer)
+<img width="328" height="648" alt="image" src="https://github.com/user-attachments/assets/5703baf8-be70-419f-a065-9693eba9f085" /># 部落冲突建筑工人计时器 (COC Builder Timer)
 
 一个帮助部落冲突玩家管理建筑升级时间的PWA应用。
+![screentshoot](./screentshoot.png)
 
 ## 功能特性
 
-- 📱 **PWA支持** - 可安装到桌面，支持离线使用
-- ⏰ **升级计时** - 实时显示建筑升级剩余时间
-- 📊 **数据统计** - 显示各类建筑升级进度
-- 🎯 **智能提醒** - 升级完成通知
-- 📱 **响应式设计** - 完美适配手机和桌面
-- 🔄 **离线缓存** - 无网络环境下也能使用
+- [ ] 📱 **PWA支持** - 可安装到桌面，支持离线使用
+- [x] ⏰ **升级计时** - 实时显示建筑升级剩余时间
+- [x] 📊 **数据统计** - 显示各类建筑升级进度
+- [ ] 🎯 **智能提醒** - 升级完成通知
+- [x] 📱 **响应式设计** - 完美适配手机和桌面
+- [x] 🔄 **离线缓存** - 无网络环境下也能使用
 
 ## 安装使用
 
@@ -48,6 +49,7 @@
 ## 开发者指南
 
 ### 项目结构
+```
 coc-builder-timer/
 ├── index.html              # 主页面
 ├── manifest.json           # PWA配置文件
@@ -62,6 +64,7 @@ coc-builder-timer/
 │   │   └── namemap.js      # 物品名称映射
 │   └── img/                # 图标和图片资源
 └── data/                   # 数据文件
+```
 
 
 ### 技术栈
@@ -179,8 +182,10 @@ PWA功能需要HTTPS环境才能正常工作，确保部署到支持HTTPS的服�
 
 ### 缓存头设置
 建议为静态资源设置适当的缓存头：
+```
 Cache-Control: public, max-age=31536000  # 静态资源
 Cache-Control: no-cache                  # HTML文件
+```
 
 
 ## 故障排除
