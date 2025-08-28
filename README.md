@@ -1,7 +1,8 @@
 # 部落冲突建筑工人计时器 (COC Builder Timer)
 
 一个帮助部落冲突玩家管理建筑升级时间的PWA应用。
-<img width="328" height="648" alt="image" src="https://github.com/user-attachments/assets/5703baf8-be70-419f-a065-9693eba9f085" />
+<br/>
+<img width="150" alt="image" src="https://github.com/user-attachments/assets/5703baf8-be70-419f-a065-9693eba9f085" />
 
 ## 功能特性
 
