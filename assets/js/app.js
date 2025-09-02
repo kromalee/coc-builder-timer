@@ -11,6 +11,8 @@ new Vue({
       // 对话框控制
       helpDialogVisible: false,
       configDialogVisible: false,
+      autoPasteDialogVisible: false,
+      clipboardData: '',
       categories: ['buildings', 'traps', 'decos', 'obstacles', 'units', 'siege_machines', 'heroes', 'spells', 'pets', 'equipment', 'buildings2', 'traps2', 'decos2', 'obstacles2', 'units2', 'heroes2'],
       categoryNames: {
         buildings: '建筑',
@@ -40,6 +42,43 @@ new Vue({
     // 显示配置对话框
     showConfigDialog() {
       this.configDialogVisible = true;
+    },
+    // 检测剪切板内容
+    async checkClipboard() {
+      try {
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          const text = await navigator.clipboard.readText();
+          if (this.isValidCOCData(text)) {
+            this.clipboardData = text;
+            this.autoPasteDialogVisible = true;
+          }
+        }
+      } catch (error) {
+        // 静默处理剪切板权限错误
+        console.log('无法访问剪切板:', error);
+      }
+    },
+    // 验证是否为有效的COC数据
+    isValidCOCData(text) {
+      try {
+        const data = JSON.parse(text.trim());
+        // 检查是否包含COC数据的关键字段
+        return data && data.tag && (data.buildings || data.heroes || data.units || data.timestamp);
+      } catch (error) {
+        return false;
+      }
+    },
+    // 确认自动粘贴
+    confirmAutoPaste() {
+      this.jsonInput = this.clipboardData;
+      this.parseJsonData();
+      this.autoPasteDialogVisible = false;
+      this.clipboardData = '';
+    },
+    // 取消自动粘贴
+    cancelAutoPaste() {
+      this.autoPasteDialogVisible = false;
+      this.clipboardData = '';
     },
     loadNameMap() {
       this.nameMap = window.COC_NAME_MAP || {};
@@ -190,6 +229,10 @@ new Vue({
     this.loadNameMap();
     this.loadFromLocalStorage();
     this.timer = setInterval(this.updateTimer, 1000);
+    // 页面加载后检测剪切板
+    setTimeout(() => {
+      this.checkClipboard();
+    }, 1000);
   },
   beforeDestroy() {
     if (this.timer) {

@@ -1,0 +1,44 @@
+<svg width="384" height="384" viewBox="0 0 384 384" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="192" cy="192" r="180" fill="#409EFF" stroke="#2E7CE8" stroke-width="8"/>
+  
+  <!-- 建筑工人帽子 -->
+  <ellipse cx="192" cy="104" rx="60" ry="40" fill="#FFD700"/>
+  <rect x="162" y="84" width="60" height="32" fill="#FFA500" rx="12"/>
+  
+  <!-- 建筑工人头部 -->
+  <circle cx="192" cy="146" r="42" fill="#FFDBAC"/>
+  
+  <!-- 眼睛 -->
+  <circle cx="176" cy="136" r="8" fill="#000"/>
+  <circle cx="208" cy="136" r="8" fill="#000"/>
+  
+  <!-- 嘴巴 -->
+  <path d="M 166 158 Q 192 168 218 158" stroke="#000" stroke-width="6" fill="none"/>
+  
+  <!-- 身体 -->
+  <rect x="146" y="188" width="92" height="104" fill="#FF6B35" rx="16"/>
+  
+  <!-- 工具带 -->
+  <rect x="134" y="224" width="116" height="16" fill="#8B4513"/>
+  
+  <!-- 锤子 -->
+  <rect x="108" y="212" width="32" height="12" fill="#654321"/>
+  <rect x="96" y="200" width="24" height="40" fill="#C0C0C0"/>
+  
+  <!-- 时钟表盘 -->
+  <circle cx="272" cy="272" r="64" fill="#FFF" stroke="#333" stroke-width="8"/>
+  
+  <!-- 时钟刻度 -->
+  <line x1="272" y1="214" x2="272" y2="228" stroke="#333" stroke-width="6"/>
+  <line x1="330" y1="272" x2="316" y2="272" stroke="#333" stroke-width="6"/>
+  <line x1="272" y1="330" x2="272" y2="316" stroke="#333" stroke-width="6"/>
+  <line x1="214" y1="272" x2="228" y2="272" stroke="#333" stroke-width="6"/>
+  
+  <!-- 时钟指针 -->
+  <line x1="272" y1="272" x2="272" y2="236" stroke="#333" stroke-width="8" stroke-linecap="round"/>
+  <line x1="272" y1="272" x2="300" y2="272" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- 中心点 -->
+  <circle cx="272" cy="272" r="8" fill="#333"/>
+</svg>
