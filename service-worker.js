@@ -1,6 +1,6 @@
-const CACHE_NAME = 'coc-timer-v1.1.0';
-const STATIC_CACHE = 'coc-timer-static-v1.1.0';
-const DYNAMIC_CACHE = 'coc-timer-dynamic-v1.1.0';
+const CACHE_NAME = 'coc-timer-v1.2.0';
+const STATIC_CACHE = 'coc-timer-static-v1.2.0';
+const DYNAMIC_CACHE = 'coc-timer-dynamic-v1.2.0';
 
 // 静态资源缓存列表
 const STATIC_ASSETS = [
@@ -11,7 +11,13 @@ const STATIC_ASSETS = [
   './assets/js/app.js',
   './assets/js/pwa.js',
   './assets/data/namemap.js',
-  './assets/img/setting.png'
+  './assets/img/setting.png',
+  './assets/img/pwa-64x64.png',
+  './assets/img/pwa-192x192.png',
+  './assets/img/pwa-512x512.png',
+  './assets/img/maskable-icon-512x512.png',
+  './assets/img/favicon.ico',
+  './assets/img/apple-touch-icon-180x180.png'
 ];
 
 // CDN资源缓存列表
