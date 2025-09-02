@@ -51,7 +51,7 @@ function updatePackageVersion(version) {
     const packageJson = JSON.parse(packageContent);
     
     // 更新版本号
-    packageJson.version = `1.${version}`;
+    packageJson.version = `${version}`;
     
     // 写回文件
     fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2) + '\n');

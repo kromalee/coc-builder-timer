@@ -1,6 +1,6 @@
-const CACHE_NAME = 'coc-timer-v1.250902111305';
-const STATIC_CACHE = 'coc-timer-static-v1.250902111305';
-const DYNAMIC_CACHE = 'coc-timer-dynamic-v1.250902111305';
+const CACHE_NAME = 'coc-timer-v1.250902113511';
+const STATIC_CACHE = 'coc-timer-static-v1.250902113511';
+const DYNAMIC_CACHE = 'coc-timer-dynamic-v1.250902113511';
 
 // 静态资源缓存列表
 const STATIC_ASSETS = [

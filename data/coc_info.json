@@ -320,7 +320,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "其他",
-					"clashNo": null
+					"clashNo": 1000037
 				},
 				{
 					"id": 828,
@@ -4135,6 +4135,21 @@
 					"superType": 0,
 					"cocType": "防御",
 					"clashNo": "1000013"
+				},
+								{
+					"id": 1000031,
+					"name": "（改装）多管迫击炮",
+					"nameZh": "（改装）多管迫击炮",
+					"imgUrl": "http://www.clashofclan.top/image/hometown/defense/Mortar/Mortar17.png?x-oss-process=image/resize,m_lfit,w_120/quality,q_100",
+					"cocImgUrl": null,
+					"description": null,
+					"countryType": 0,
+					"type": 1,
+					"resourcesType": null,
+					"trainType": null,
+					"superType": 0,
+					"cocType": "防御",
+					"clashNo": "1000031"
 				},
 				{
 					"id": 88,

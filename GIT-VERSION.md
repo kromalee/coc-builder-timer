@@ -150,8 +150,6 @@ git log -1 --format=%ct
 # 删除或重命名Git钩子
 mv .git/hooks/post-commit .git/hooks/post-commit.disabled
 
-# 恢复手动版本管理
-npm run update-version
 ```
 
 ## 🎉 总结
