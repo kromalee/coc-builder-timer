@@ -1,6 +1,6 @@
 {
   "name": "coc-builder-timer",
-  "version": "250902122502",
+  "version": "250902122734",
   "description": "部落冲突建筑工人升级计时器",
   "scripts": {
     "update-version": "node scripts/update-version.js",

@@ -65,6 +65,11 @@
                         </el-col>
                         <el-col :xs="8" :sm="6" :md="4">
                             <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+                                <el-tooltip content="快速粘贴" placement="bottom">
+                                    <el-button icon="el-icon-document-copy" circle size="medium" @click="quickPasteAndProcess"
+                                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">
+                                    </el-button>
+                                </el-tooltip>
                                 <el-tooltip content="使用帮助" placement="bottom">
                                     <el-button icon="el-icon-question" circle size="medium" @click="showHelpDialog"
                                         style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">
@@ -159,18 +164,7 @@
             </span>
         </el-dialog>
 
-        <!-- 自动粘贴确认对话框 -->
-        <el-dialog title="检测到剪切板数据" :visible.sync="autoPasteDialogVisible" width="400px" center>
-            <div style="text-align: center; padding: 20px;">
-                <i class="el-icon-info" style="font-size: 48px; color: #409eff; margin-bottom: 16px;"></i>
-                <p style="margin: 16px 0; color: #303133; font-size: 16px;">检测到剪切板中有COC数据</p>
-                <p style="margin: 12px 0; color: #606266; line-height: 1.6;">是否要自动粘贴并解析这些数据？</p>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="cancelAutoPaste()">取消</el-button>
-                <el-button type="primary" @click="confirmAutoPaste()">确认粘贴</el-button>
-            </span>
-        </el-dialog>
+
 
         <!-- 配置对话框 -->
         <el-dialog title="玩家配置" :visible.sync="configDialogVisible" top="5vh">
@@ -182,11 +176,15 @@
                     style="margin-bottom: 10px;">
                 </el-input>
                 <el-row :gutter="10">
-                    <el-col :span="12">
+                    <el-col :span="8">
+                        <el-button type="success" @click="quickPasteAndProcess" icon="el-icon-document-copy"
+                            style="width: 100%;">快速粘贴</el-button>
+                    </el-col>
+                    <el-col :span="8">
                         <el-button type="primary" @click="parseJsonData" :disabled="!jsonInput.trim()"
                             style="width: 100%;">解析数据</el-button>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="8">
                         <el-button @click="clearInput" style="width: 100%;">清空输入</el-button>
                     </el-col>
                 </el-row>
