@@ -1,4 +1,13 @@
 {
+  "name": "coc-builder-timer",
+  "version": "1.250902111305",
+  "description": "部落冲突建筑工人升级计时器",
+  "scripts": {
+    "update-version": "node scripts/update-version.js",
+    "git-version": "node scripts/git-version-hook.js",
+    "build": "npm run git-version",
+    "generate-icons": "pwa-assets-generator"
+  },
   "devDependencies": {
     "@vite-pwa/assets-generator": "^1.0.0"
   }
