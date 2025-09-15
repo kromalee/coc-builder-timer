@@ -11,6 +11,11 @@ new Vue({
       // 对话框控制
       helpDialogVisible: false,
       configDialogVisible: false,
+      // 通知设置
+      notificationEnabled: false,
+      notificationPermission: 'default',
+      // 浏览器API引用
+      window: window,
       categories: ['buildings', 'traps', 'decos', 'obstacles', 'units', 'siege_machines', 'heroes', 'spells', 'pets', 'equipment', 'buildings2', 'traps2', 'decos2', 'obstacles2', 'units2', 'heroes2'],
       categoryNames: {
         buildings: '建筑',
@@ -41,6 +46,176 @@ new Vue({
     showConfigDialog() {
       this.configDialogVisible = true;
     },
+    // 请求通知权限
+    async requestNotificationPermission() {
+      if (!('Notification' in window)) {
+        this.$message.error('此浏览器不支持通知功能');
+        return false;
+      }
+
+      if (Notification.permission === 'granted') {
+        this.notificationPermission = 'granted';
+        this.notificationEnabled = true;
+        this.$message.success('通知权限已开启');
+        return true;
+      }
+
+      if (Notification.permission === 'denied') {
+        this.notificationPermission = 'denied';
+        this.notificationEnabled = false;
+        this.$message.warning('通知权限已被拒绝，请在浏览器设置中手动开启');
+        return false;
+      }
+
+      try {
+        const permission = await Notification.requestPermission();
+        this.notificationPermission = permission;
+        
+        if (permission === 'granted') {
+          this.notificationEnabled = true;
+          this.$message.success('通知权限已开启');
+          return true;
+        } else {
+          this.notificationEnabled = false;
+          this.$message.warning('通知权限被拒绝');
+          return false;
+        }
+      } catch (error) {
+        console.error('请求通知权限失败:', error);
+        this.$message.error('请求通知权限失败');
+        return false;
+      }
+    },
+
+    // 发送通知
+    sendNotification(title, body, options = {}) {
+      if (!this.notificationEnabled || Notification.permission !== 'granted') {
+        return;
+      }
+
+      const defaultOptions = {
+        icon: './assets/img/pwa-192x192.png',
+        badge: './assets/img/pwa-64x64.png',
+        tag: 'coc-timer',
+        requireInteraction: true,
+        ...options
+      };
+
+      try {
+        // 优先使用Service Worker通知（更好的iOS支持）
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({
+            type: 'SCHEDULE_NOTIFICATION',
+            title,
+            body,
+            delay: 0,
+            tag: defaultOptions.tag
+          });
+        } else {
+          // 回退到直接通知
+          const notification = new Notification(title, {
+            body,
+            ...defaultOptions
+          });
+
+          notification.onclick = () => {
+            window.focus();
+            notification.close();
+          };
+
+          // 自动关闭通知（iOS Safari需要）
+          setTimeout(() => {
+            notification.close();
+          }, 10000);
+        }
+
+      } catch (error) {
+        console.error('发送通知失败:', error);
+      }
+    },
+
+    // 调度延迟通知（用于升级完成提醒）
+    scheduleNotification(title, body, delay, tag) {
+      if (!this.notificationEnabled || Notification.permission !== 'granted') {
+        return;
+      }
+
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'SCHEDULE_NOTIFICATION',
+          title,
+          body,
+          delay,
+          tag
+        });
+      } else {
+        // 回退到setTimeout
+        setTimeout(() => {
+          this.sendNotification(title, body, { tag });
+        }, delay);
+      }
+    },
+
+    // 检查升级完成并发送通知
+    checkUpgradeCompletion() {
+      if (!this.notificationEnabled) return;
+
+      const now = Date.now();
+      const upgradingItems = this.getAllUpgradingItems();
+      
+      upgradingItems.forEach(item => {
+        const completionTime = item.upgradeEndTime * 1000;
+        const timeLeft = completionTime - now;
+        
+        // 如果在1分钟内完成，发送即将完成通知
+        if (timeLeft > 0 && timeLeft <= 60000 && !item.notificationSent) {
+          this.sendNotification(
+            '升级即将完成',
+            `${item.playerName}的${item.displayName}将在1分钟内完成升级`,
+            { tag: `upgrade-soon-${item.id}` }
+          );
+          item.notificationSent = true;
+        }
+        
+        // 如果已经完成，发送完成通知
+        if (timeLeft <= 0 && !item.completionNotificationSent) {
+          this.sendNotification(
+            '升级已完成！',
+            `${item.playerName}的${item.displayName}升级已完成`,
+            { tag: `upgrade-complete-${item.id}` }
+          );
+          item.completionNotificationSent = true;
+        }
+      });
+    },
+
+    // 切换通知设置
+    async toggleNotification() {
+      if (!this.notificationEnabled) {
+        const granted = await this.requestNotificationPermission();
+        if (granted) {
+          this.notificationEnabled = true;
+        }
+      } else {
+        this.notificationEnabled = false;
+        this.$message.info('通知已关闭');
+      }
+    },
+
+    // 检查通知权限状态
+    checkNotificationPermission() {
+      if ('Notification' in window) {
+        this.notificationPermission = Notification.permission;
+        if (this.notificationPermission === 'granted') {
+          this.notificationEnabled = true;
+        } else {
+          this.notificationEnabled = false;
+        }
+      } else {
+        this.notificationEnabled = false;
+      }
+    },
+
     // 快速粘贴并处理数据
     async quickPasteAndProcess() {
       try {
@@ -215,11 +390,14 @@ new Vue({
     },
     updateTimer() {
       this.currentTime = Date.now();
+      // 检查升级完成状态并发送通知
+      this.checkUpgradeCompletion();
     }
   },
   mounted() {
     this.loadNameMap();
     this.loadFromLocalStorage();
+    this.checkNotificationPermission();
     this.timer = setInterval(this.updateTimer, 1000);
   },
   beforeDestroy() {

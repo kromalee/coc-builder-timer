@@ -154,9 +154,6 @@
                     <el-alert title="1. 获取数据的方式" type="warning" :closable="false" >
                         <el-image src="./assets/img/setting.png" lazy></el-image>
                     </el-alert>
-                    <el-alert title="2. 注意：英雄大作战活动导致无法正确获取英雄升级时间" type="warning" :closable="false" show-icon>
-                    </el-alert>
-
                 </el-col>
             </el-row>
             <span slot="footer" class="dialog-footer">
@@ -168,6 +165,52 @@
 
         <!-- 配置对话框 -->
         <el-dialog title="玩家配置" :visible.sync="configDialogVisible" top="5vh">
+            <!-- 通知设置 -->
+            <el-card style="margin-bottom: 20px;">
+                <div slot="header">
+                    <i class="el-icon-bell"></i> 通知设置
+                </div>
+                <el-row :gutter="20" type="flex" align="middle">
+                    <el-col :span="16">
+                        <div>
+                            <div style="font-weight: bold; margin-bottom: 4px;">升级完成通知</div>
+                            <div style="font-size: 12px; color: #909399;">
+                                当建筑升级完成时发送系统通知提醒
+                                <span v-if="notificationPermission === 'denied'" style="color: #f56c6c;">
+                                    (权限已拒绝，请在浏览器设置中手动开启)
+                                </span>
+                                <span v-else-if="!('Notification' in window)" style="color: #f56c6c;">
+                                    (当前浏览器不支持通知功能)
+                                </span>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :span="8" style="text-align: right;">
+                        <el-switch
+                            v-model="notificationEnabled"
+                            @change="toggleNotification"
+                            :disabled="notificationPermission === 'denied' || !('Notification' in window)"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949">
+                        </el-switch>
+                    </el-col>
+                </el-row>
+                <el-row v-if="notificationEnabled" style="margin-top: 15px;">
+                    <el-col>
+                        <el-alert
+                            title="通知功能已开启"
+                            type="success"
+                            :closable="false"
+                            show-icon>
+                            <div slot="description">
+                                • 升级完成前1分钟会收到提醒通知<br>
+                                • 升级完成时会收到完成通知<br>
+                                • 点击通知可快速回到应用
+                            </div>
+                        </el-alert>
+                    </el-col>
+                </el-row>
+            </el-card>
 
             <!-- 玩家管理 -->
             <el-card style="margin-bottom: 20px;">

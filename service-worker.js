@@ -1,6 +1,6 @@
-const CACHE_NAME = 'coc-timer-v250902123427';
-const STATIC_CACHE = 'coc-timer-static-v250902123427';
-const DYNAMIC_CACHE = 'coc-timer-dynamic-v250902123427';
+const CACHE_NAME = 'coc-timer-v250910090147';
+const STATIC_CACHE = 'coc-timer-static-v250910090147';
+const DYNAMIC_CACHE = 'coc-timer-dynamic-v250910090147';
 
 // 静态资源缓存列表
 const STATIC_ASSETS = [
@@ -158,7 +158,7 @@ async function handleOtherRequests(request) {
   }
 }
 
-// 处理消息事件
+// 本地通知调度功能
 self.addEventListener('message', event => {
   const { data } = event;
   
@@ -179,6 +179,29 @@ self.addEventListener('message', event => {
       event.ports[0].postMessage({ success: true });
     });
   }
+  
+  // 处理本地通知调度
+  if (data && data.type === 'SCHEDULE_NOTIFICATION') {
+    const { title, body, delay, tag } = data;
+    
+    // 使用setTimeout在指定延迟后显示通知
+    setTimeout(() => {
+      const options = {
+        body,
+        icon: './assets/img/pwa-192x192.png',
+        badge: './assets/img/pwa-64x64.png',
+        tag: tag || 'coc-timer-local',
+        requireInteraction: true,
+        vibrate: [100, 50, 100],
+        data: {
+          dateOfArrival: Date.now(),
+          type: 'local'
+        }
+      };
+      
+      self.registration.showNotification(title, options);
+    }, delay);
+  }
 });
 
 // 后台同步事件（如果支持）
@@ -197,23 +220,25 @@ self.addEventListener('push', event => {
     const data = event.data.json();
     const options = {
       body: data.body,
-      icon: './assets/img/icon-192x192.png',
-      badge: './assets/img/icon-72x72.png',
+      icon: './assets/img/pwa-192x192.png',
+      badge: './assets/img/pwa-64x64.png',
       vibrate: [100, 50, 100],
+      requireInteraction: true,
       data: {
         dateOfArrival: Date.now(),
-        primaryKey: data.primaryKey
+        primaryKey: data.primaryKey,
+        url: data.url || './'
       },
       actions: [
         {
           action: 'explore',
           title: '查看详情',
-          icon: './assets/img/icon-96x96.png'
+          icon: './assets/img/pwa-64x64.png'
         },
         {
           action: 'close',
           title: '关闭',
-          icon: './assets/img/icon-96x96.png'
+          icon: './assets/img/pwa-64x64.png'
         }
       ]
     };
@@ -228,9 +253,23 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   
-  if (event.action === 'explore') {
+  if (event.action === 'explore' || !event.action) {
+    // 打开或聚焦到应用窗口
     event.waitUntil(
-      clients.openWindow('./')
+      clients.matchAll({ type: 'window', includeUncontrolled: true })
+        .then(clientList => {
+          // 如果已有窗口打开，聚焦到该窗口
+          for (let client of clientList) {
+            if (client.url.includes(self.location.origin) && 'focus' in client) {
+              return client.focus();
+            }
+          }
+          // 如果没有窗口打开，打开新窗口
+          if (clients.openWindow) {
+            const url = event.notification.data?.url || './';
+            return clients.openWindow(url);
+          }
+        })
     );
   }
 });

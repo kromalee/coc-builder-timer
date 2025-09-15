@@ -1,0 +1,48 @@
+{
+  "tag": "#TEST123",
+  "timestamp": 1757931633,
+  "buildings": [
+    {
+      "data": 1000001,
+      "lvl": 15,
+      "weapon": 1,
+      "timer": 120
+    },
+    {
+      "data": 1000002,
+      "lvl": 14,
+      "timer": 300
+    },
+    {
+      "data": 1000003,
+      "lvl": 13,
+      "timer": 600
+    }
+  ],
+  "heroes": [
+    {
+      "data": 4000000,
+      "lvl": 79,
+      "timer": 180
+    },
+    {
+      "data": 4000001,
+      "lvl": 65,
+      "timer": 450
+    }
+  ],
+  "spells": [
+    {
+      "data": 5000000,
+      "lvl": 8,
+      "timer": 90
+    }
+  ],
+  "pets": [
+    {
+      "data": 8000000,
+      "lvl": 9,
+      "timer": 240
+    }
+  ]
+}
