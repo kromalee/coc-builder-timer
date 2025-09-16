@@ -1,3 +1,4 @@
+Vue.config.devtools = true
 new Vue({
   el: '#app',
   data() {
@@ -190,8 +191,8 @@ new Vue({
     },
 
     // 切换通知设置
-    async toggleNotification() {
-      if (!this.notificationEnabled) {
+    async toggleNotification(result) {
+      if (result) {
         const granted = await this.requestNotificationPermission();
         if (granted) {
           this.notificationEnabled = true;
