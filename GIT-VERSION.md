@@ -2,24 +2,25 @@
 
 ## 🎯 功能概述
 
-基于Git提交时间自动生成版本号，格式为 `YYMMDDHHmmss`，实现完全自动化的版本管理。
+基于当前时间自动生成版本号，格式为 `YYMMDDHHmmss`，实现完全自动化的版本管理。
 
 ## 📋 版本号格式
 
-- **格式**: `1.YYMMDDHHmmss`
-- **示例**: `1.250902111305` (2025年09月02日 11:13:05)
-- **说明**: 主版本号固定为1，副版本号为Git提交时间戳
+- **格式**: `YYMMDDHHmmss`
+- **示例**: `250919153351` (2025年09月19日 15点33分51秒)
+- **说明**: 版本号基于提交时的当前时间生成
 
 ## 🔄 工作原理
 
 ### 1. **Git钩子触发**
-- 每次Git提交后自动触发 `post-commit` 钩子
-- 钩子调用版本管理脚本
+- 每次Git提交前自动触发 `pre-commit` 钩子
+- 钩子调用版本管理脚本并自动添加到暂存区
+- ✅ **已更新**: 版本号现在随提交一起提交，而不是提交后生成
 
 ### 2. **版本号生成**
-- 读取最新Git提交的时间戳
+- 使用当前时间生成版本号
 - 格式化为 `YYMMDDHHmmss` 格式
-- 如果无法获取Git时间，使用当前时间
+- 确保版本号与提交时间保持一致
 
 ### 3. **自动同步**
 - 更新 `package.json` 版本号
@@ -51,7 +52,7 @@ node scripts/git-version-hook.js
 
 | 文件 | 作用 | 更新方式 |
 |------|------|----------|
-| `.git/hooks/post-commit` | Git提交钩子 | 自动触发 |
+| `.git/hooks/pre-commit` | Git提交前钩子 | 自动触发 |
 | `scripts/git-version-hook.js` | 版本管理脚本 | 自动执行 |
 | `package.json` | 版本号存储 | 脚本自动更新 |
 | `service-worker.js` | 缓存版本控制 | 脚本自动更新 |
@@ -103,13 +104,13 @@ packageJson.version = `2.${version}`;
 
 ```bash
 # 检查钩子文件权限
-ls -la .git/hooks/post-commit
+ls -la .git/hooks/pre-commit
 
 # 手动设置执行权限（Linux/Mac）
-chmod +x .git/hooks/post-commit
+chmod +x .git/hooks/pre-commit
 
 # Windows设置权限
-icacls ".git\hooks\post-commit" /grant Everyone:F
+icacls ".git\hooks\pre-commit" /grant Everyone:F
 ```
 
 ### **版本号未更新**
@@ -148,8 +149,7 @@ git log -1 --format=%ct
 
 ```bash
 # 删除或重命名Git钩子
-mv .git/hooks/post-commit .git/hooks/post-commit.disabled
-
+mv .git/hooks/pre-commit .git/hooks/pre-commit.disabled
 ```
 
 ## 🎉 总结
