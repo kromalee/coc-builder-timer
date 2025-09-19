@@ -1,7 +1,7 @@
 {
-  "name": "部落冲突建筑工人计时器",
+  "name": "COC计时器",
   "short_name": "COC计时器",
-  "description": "部落冲突建筑工人升级计时器，帮助玩家管理建筑升级时间",
+  "description": "COC计时器，帮助玩家管理建筑升级时间",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

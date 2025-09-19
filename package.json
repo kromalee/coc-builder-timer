@@ -1,7 +1,7 @@
 {
   "name": "coc-builder-timer",
-  "version": "250915182531",
-  "description": "部落冲突建筑工人升级计时器",
+  "version": "250919152120",
+  "description": "COC计时器",
   "scripts": {
     "update-version": "node scripts/update-version.js",
     "git-version": "node scripts/git-version-hook.js",
