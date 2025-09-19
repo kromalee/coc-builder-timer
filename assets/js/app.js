@@ -36,7 +36,45 @@ new Vue({
         units2: '夜世界兵种',
         heroes2: '夜世界英雄'
       }
+
     };
+  },
+  computed: {
+    AllUpgradingItems() {
+      const allItems = [];
+      Object.keys(this.players).forEach(playerTag => {
+        const gameData = this.players[playerTag];
+
+        this.categories.forEach(category => {
+          if (gameData[category]) {
+            gameData[category].forEach((item, index) => {
+              if (item.timer) {
+                const endTime = gameData.timestamp * 1000 + item.timer * 1000;
+                const remainingTime = Math.max(0, endTime - this.currentTime);
+
+                allItems.push({
+                  id: `${playerTag}_${category}_${index}`,
+                  index: index,
+                  playerTag: playerTag,
+                  playerName: this.playerRemarks[playerTag] || playerTag,
+                  category: category,
+                  categoryName: this.categoryNames[category] || category,
+                  displayName: this.getDisplayName(item.data),
+                  lvl: item.lvl,
+                  timer: item.timer,
+                  remainingTime: remainingTime,
+                  endTime: endTime,
+                  notificationSent: item.notificationSent,
+                  completionNotificationSent: item.completionNotificationSent
+                });
+              }
+            });
+          }
+        });
+      });
+
+      return allItems.sort((a, b) => a.remainingTime - b.remainingTime);
+    },
   },
   methods: {
     // 显示帮助对话框
@@ -71,7 +109,7 @@ new Vue({
       try {
         const permission = await Notification.requestPermission();
         this.notificationPermission = permission;
-        
+
         if (permission === 'granted') {
           this.notificationEnabled = true;
           this.$message.success('通知权限已开启');
@@ -162,30 +200,32 @@ new Vue({
       if (!this.notificationEnabled) return;
 
       const now = Date.now();
-      const upgradingItems = this.getAllUpgradingItems();
-      
+      const upgradingItems = this.AllUpgradingItems;
+
       upgradingItems.forEach(item => {
-        const completionTime = item.upgradeEndTime * 1000;
+        const completionTime = item.endTime;
         const timeLeft = completionTime - now;
-        
-        // 如果在1分钟内完成，发送即将完成通知
-        if (timeLeft > 0 && timeLeft <= 60000 && !item.notificationSent) {
+
+        // 如果在5分钟内完成，发送即将完成通知
+        if (timeLeft > 0 && timeLeft <= 300000 && !item.notificationSent) {
           this.sendNotification(
             '升级即将完成',
-            `${item.playerName}的${item.displayName}将在1分钟内完成升级`,
+            `${item.playerName}的${item.displayName}将在5分钟内完成升级`,
             { tag: `upgrade-soon-${item.id}` }
           );
-          item.notificationSent = true;
+          // 将原始数据 this.players中的数据 标记为已发送通知
+          this.players[item.playerTag][item.category][item.index].notificationSent = true;
         }
-        
-        // 如果已经完成，发送完成通知
-        if (timeLeft <= 0 && !item.completionNotificationSent) {
+
+        // 如果已经完成，并且没有超时五分钟。发送完成通知
+        if (timeLeft <= 0 && timeLeft >= -300000 && !item.completionNotificationSent) {
           this.sendNotification(
             '升级已完成！',
             `${item.playerName}的${item.displayName}升级已完成`,
             { tag: `upgrade-complete-${item.id}` }
           );
-          item.completionNotificationSent = true;
+          // 将原始数据 this.players中的数据 标记为已发送完成通知
+          this.players[item.playerTag][item.category][item.index].completionNotificationSent = true;
         }
       });
     },
@@ -279,6 +319,24 @@ new Vue({
       this.jsonInput = '';
     },
     addPlayer(tag, data) {
+      // 为每个带有timer的项目添加通知状态标识
+      if (data) {
+        this.categories.forEach(category => {
+          if (data[category] && Array.isArray(data[category])) {
+            data[category].forEach(item => {
+              if (item.timer) {
+                if (!item.hasOwnProperty('notificationSent')) {
+                  item.notificationSent = false
+                }
+                if (!item.hasOwnProperty('completionNotificationSent')) {
+                  item.completionNotificationSent = false
+                }
+              }
+            });
+          }
+        });
+      }
+
       this.$set(this.players, tag, data);
       if (!this.playerRemarks[tag]) {
         this.$set(this.playerRemarks, tag, '');
@@ -288,38 +346,7 @@ new Vue({
       this.$delete(this.players, tag);
       this.$delete(this.playerRemarks, tag);
     },
-    getAllUpgradingItems() {
-      const allItems = [];
 
-      Object.keys(this.players).forEach(playerTag => {
-        const gameData = this.players[playerTag];
-
-        this.categories.forEach(category => {
-          if (gameData[category]) {
-            gameData[category].forEach((item, index) => {
-              if (item.timer) {
-                const endTime = gameData.timestamp * 1000 + item.timer * 1000;
-                const remainingTime = Math.max(0, endTime - this.currentTime);
-
-                allItems.push({
-                  id: `${playerTag}_${category}_${index}`,
-                  playerTag: playerTag,
-                  category: category,
-                  categoryName: this.categoryNames[category] || category,
-                  displayName: this.getDisplayName(item.data),
-                  lvl: item.lvl,
-                  timer: item.timer,
-                  remainingTime: remainingTime,
-                  endTime: endTime
-                });
-              }
-            });
-          }
-        });
-      });
-
-      return allItems.sort((a, b) => a.remainingTime - b.remainingTime);
-    },
     getPlayerUpgradingCount(gameData) {
       let count = 0;
       this.categories.forEach(category => {
@@ -332,7 +359,7 @@ new Vue({
       return count;
     },
     getNextCompletionTime() {
-      const items = this.getAllUpgradingItems();
+      const items = this.AllUpgradingItems;
       if (items.length === 0) return '无';
 
       const nextItem = items[0];

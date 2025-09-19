@@ -7,7 +7,7 @@
     <meta name="description" content="部落冲突建筑工人升级计时器，帮助玩家管理建筑升级时间">
     <meta name="keywords" content="部落冲突,COC,建筑工人,升级计时器,游戏工具">
     <meta name="author" content="COC Timer">
-    
+
     <!-- PWA相关meta标签 -->
     <meta name="theme-color" content="#409EFF">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,28 +15,32 @@
     <meta name="apple-mobile-web-app-title" content="COC计时器">
     <meta name="msapplication-TileColor" content="#409EFF">
     <meta name="msapplication-tap-highlight" content="no">
-    
+
     <title>部落冲突建筑工人计时器</title>
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="./manifest.json">
-    
+
     <!-- 图标链接 -->
     <link rel="icon" href="./assets/img/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="./assets/img/apple-touch-icon-180x180.png">
 
-    
+
     <!-- 样式文件 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="./assets/css/main.css">
-    
+
     <style>
-        [v-cloak] { display: none !important; }
+        [v-cloak] {
+            display: none !important;
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
         }
+
         .version-info {
             position: fixed;
             bottom: 10px;
@@ -47,6 +51,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="app" v-cloak>
         <el-container>
@@ -66,7 +71,8 @@
                         <el-col :xs="8" :sm="6" :md="4">
                             <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
                                 <el-tooltip content="快速粘贴" placement="bottom">
-                                    <el-button icon="el-icon-document-copy" circle size="medium" @click="quickPasteAndProcess"
+                                    <el-button icon="el-icon-document-copy" circle size="medium"
+                                        @click="quickPasteAndProcess"
                                         style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">
                                     </el-button>
                                 </el-tooltip>
@@ -93,10 +99,10 @@
                             <div style="font-size: 20px; font-weight: bold; color: #409eff;">{{
                                 Object.keys(players).length }}</div>
                         </el-col>
-                        <el-col :span="6"  style="text-align: center;">
+                        <el-col :span="6" style="text-align: center;">
                             <div style="color: #909399; font-size: 14px; margin-bottom: 4px;">升级项目</div>
                             <div style="font-size: 20px; font-weight: bold; color: #e6a23c;">{{
-                                getAllUpgradingItems().length }}</div>
+                                AllUpgradingItems.length }}</div>
                         </el-col>
                         <el-col :span="12" style="text-align: center;">
                             <div style="color: #909399; font-size: 14px; margin-bottom: 4px;">最近完成时间</div>
@@ -109,11 +115,11 @@
                 <!-- 升级项目列表 -->
                 <el-card>
                     <div slot="header">所有升级项目</div>
-                    <el-empty v-if="getAllUpgradingItems().length === 0" description="暂无升级项目">
+                    <el-empty v-if="AllUpgradingItems.length === 0" description="暂无升级项目">
                         <el-icon name="info"></el-icon>
                     </el-empty>
                     <div v-else>
-                        <el-row v-for="item in getAllUpgradingItems()" :key="item.id" style="margin-bottom: 8px;">
+                        <el-row v-for="item in AllUpgradingItems" :key="item.id" style="margin-bottom: 8px;">
                             <el-card shadow="hover" :body-style="{ padding: '12px 16px' }">
                                 <el-row type="flex" justify="space-between" align="middle">
                                     <el-col>
@@ -151,7 +157,7 @@
                     <i class="el-icon-info" style="font-size: 48px; color: #409eff; margin-bottom: 16px;"></i>
                     <h3 style="margin: 16px 0; color: #303133;">COC计时器</h3>
                     <p style="margin: 12px 0; color: #606266; line-height: 1.6;">快速查看剩余升级时间！</p>
-                    <el-alert title="1. 获取数据的方式" type="warning" :closable="false" >
+                    <el-alert title="1. 获取数据的方式" type="warning" :closable="false">
                         <el-image src="./assets/img/setting.png" lazy></el-image>
                     </el-alert>
                 </el-col>
@@ -186,24 +192,17 @@
                         </div>
                     </el-col>
                     <el-col :span="8" style="text-align: right;">
-                        <el-switch
-                            v-model="notificationEnabled"
-                            @change="toggleNotification"
+                        <el-switch v-model="notificationEnabled" @change="toggleNotification"
                             :disabled="notificationPermission === 'denied' || !('Notification' in window)"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
+                            active-color="#13ce66" inactive-color="#ff4949">
                         </el-switch>
                     </el-col>
                 </el-row>
                 <el-row v-if="notificationEnabled" style="margin-top: 15px;">
                     <el-col>
-                        <el-alert
-                            title="通知功能已开启"
-                            type="success"
-                            :closable="false"
-                            show-icon>
+                        <el-alert title="通知功能已开启" type="success" :closable="false" show-icon>
                             <div slot="description">
-                                • 升级完成前1分钟会收到提醒通知<br>
+                                • 升级完成前5分钟会收到提醒通知<br>
                                 • 升级完成时会收到完成通知<br>
                                 • 点击通知可快速回到应用
                             </div>
