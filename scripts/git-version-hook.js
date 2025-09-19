@@ -9,23 +9,17 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// 获取Git提交时间并格式化为版本号
+// 获取版本号（使用当前时间，因为pre-commit钩子中还没有提交记录）
 function getVersionFromGit() {
   try {
-    // 获取最新提交的时间戳
-    const timestamp = execSync('git log -1 --format=%ct', { encoding: 'utf8' }).trim();
-    
-    if (!timestamp) {
-      console.log('⚠️  无法获取Git提交时间，使用当前时间');
-      return formatDateToVersion(new Date());
-    }
-    
-    // 转换为Date对象
-    const commitDate = new Date(parseInt(timestamp) * 1000);
-    return formatDateToVersion(commitDate);
+    // 在pre-commit钩子中，我们使用当前时间作为版本号
+    // 这样可以确保版本号与提交时间保持一致
+    const now = new Date();
+    console.log(`📅 使用当前时间生成版本号: ${now.toISOString()}`);
+    return formatDateToVersion(now);
     
   } catch (error) {
-    console.log('⚠️  Git命令执行失败，使用当前时间:', error.message);
+    console.log('⚠️  生成版本号失败，使用当前时间:', error.message);
     return formatDateToVersion(new Date());
   }
 }
@@ -124,9 +118,9 @@ function main() {
   console.log('🚀 开始Git版本自动管理...');
   
   try {
-    // 1. 获取Git提交时间版本号
+    // 1. 获取版本号（使用当前时间）
     const gitVersion = getVersionFromGit();
-    console.log(`📅 Git提交时间版本: ${gitVersion}`);
+    console.log(`📅 生成的版本号: ${gitVersion}`);
     
     // 2. 更新package.json
     const fullVersion = updatePackageVersion(gitVersion);
