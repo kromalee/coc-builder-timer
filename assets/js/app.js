@@ -416,6 +416,66 @@ new Vue({
     formatTimestamp(timestamp) {
       return new Date(timestamp * 1000).toLocaleString('zh-CN');
     },
+    // 获取近两天（自然日：今天至明天23:59:59）的即将完成升级列表（数组）
+    getUpcomingNextTwoDays() {
+      const now = new Date();
+      const endOfTomorrow = new Date(now);
+      endOfTomorrow.setDate(now.getDate() + 1);
+      endOfTomorrow.setHours(23, 59, 59, 999);
+
+      const startMs = now.getTime();
+      const endMs = endOfTomorrow.getTime();
+
+      const pad = (n) => String(n).padStart(2, '0');
+      const formatLocalDateTime = (date) => {
+        return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+      };
+      const toLocalISOWithOffset = (date) => {
+        const tzo = -date.getTimezoneOffset(); // 分钟，东八区为 +480
+        const sign = tzo >= 0 ? '+' : '-';
+        const hh = pad(Math.floor(Math.abs(tzo) / 60));
+        const mm = pad(Math.abs(tzo) % 60);
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}${sign}${hh}:${mm}`;
+      };
+
+      const todos = [];
+      const upgradingItems = this.AllUpgradingItems || [];
+
+      upgradingItems.forEach(item => {
+        const endTimeMs = item.endTime;
+        if (endTimeMs < startMs || endTimeMs > endMs) return;
+
+        // 更准确获取等级
+        let level = item.lvl;
+        try {
+          const src = this.players[item.playerTag]?.[item.category]?.[item.index];
+          if (src && src.lvl) level = src.lvl;
+        } catch (e) {}
+
+        const endDateObj = new Date(endTimeMs);
+
+        todos.push({
+          title: `${item.playerName}的${item.displayName}升级完成`,
+          note: `${item.categoryName} Lv.${level || ''} 完成时间 ${formatLocalDateTime(endDateObj)}`.trim(),
+          dueISO: toLocalISOWithOffset(endDateObj)
+        });
+      });
+
+      // 按时间升序
+      todos.sort((a, b) => new Date(a.dueISO) - new Date(b.dueISO));
+
+      return todos;
+    },
+    // 以字符串形式返回 JSON（数组），便于快捷指令“获取字典”并循环
+    getUpcomingNextTwoDaysJSON() {
+      try {
+        return JSON.stringify(this.getUpcomingNextTwoDays());
+      } catch (e) {
+        console.error('生成近两天JSON失败:', e);
+        return '[]';
+      }
+    },
+    
     updateTimer() {
       this.currentTime = Date.now();
       // 检查升级完成状态并发送通知
@@ -427,6 +487,11 @@ new Vue({
     this.loadFromLocalStorage();
     this.checkNotificationPermission();
     this.timer = setInterval(this.updateTimer, 1000);
+    // 暴露到 window 以便在控制台或快捷指令桥接调用
+    if (typeof window !== 'undefined') {
+      window.getUpcomingNextTwoDays = () => this.getUpcomingNextTwoDays();
+      window.getUpcomingNextTwoDaysJSON = () => this.getUpcomingNextTwoDaysJSON();
+    }
   },
   beforeDestroy() {
     if (this.timer) {
