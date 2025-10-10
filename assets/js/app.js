@@ -455,8 +455,8 @@ new Vue({
         const endDateObj = new Date(endTimeMs);
 
         todos.push({
-          title: `${item.playerName}的${item.displayName}${level || ''}升级完成`,
-          note: `${item.playerName}的${item.displayName}Lv.${level || ''}升级完成时间 ${formatLocalDateTime(endDateObj)}`.trim(),
+          title: `${item.playerName}的${item.categoryName}${item.displayName}Lv.${level || ''}升级完成`,
+          note: `${item.playerName}的${item.categoryName}${item.displayName}Lv.${level || ''}升级完成时间 ${formatLocalDateTime(endDateObj)}`.trim(),
           dueISO: toLocalISOWithOffset(endDateObj)
         });
       });
