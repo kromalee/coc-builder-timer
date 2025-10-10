@@ -450,13 +450,13 @@ new Vue({
         try {
           const src = this.players[item.playerTag]?.[item.category]?.[item.index];
           if (src && src.lvl) level = src.lvl;
-        } catch (e) {}
+        } catch (e) { }
 
         const endDateObj = new Date(endTimeMs);
 
         todos.push({
-          title: `${item.playerName}的${item.displayName}升级完成`,
-          note: `${item.categoryName} Lv.${level || ''} 完成时间 ${formatLocalDateTime(endDateObj)}`.trim(),
+          title: `${item.playerName}的${item.displayName}${level || ''}升级完成`,
+          note: `${item.playerName}的${item.displayName}Lv.${level || ''}升级完成时间 ${formatLocalDateTime(endDateObj)}`.trim(),
           dueISO: toLocalISOWithOffset(endDateObj)
         });
       });
@@ -475,11 +475,32 @@ new Vue({
         return '[]';
       }
     },
-    
+
+    // 将近两天的待办数组JSON写入隐藏标签，供快捷指令读取
+    updateUpcomingTodosHiddenTag() {
+      try {
+        const el = document.getElementById('coc-next-two-days');
+        if (!el) return;
+        const json = this.getUpcomingNextTwoDaysJSON();
+        el.setAttribute('data-json', json);
+        el.setAttribute('data-generated-at', new Date().toISOString());
+        try {
+          const arr = JSON.parse(json);
+          el.setAttribute('data-count', String(Array.isArray(arr) ? arr.length : 0));
+        } catch (_) {
+          el.setAttribute('data-count', '0');
+        }
+      } catch (err) {
+        console.error('更新隐藏标签失败:', err);
+      }
+    },
+
     updateTimer() {
       this.currentTime = Date.now();
       // 检查升级完成状态并发送通知
       this.checkUpgradeCompletion();
+      // 同步隐藏标签内容
+      this.updateUpcomingTodosHiddenTag();
     }
   },
   mounted() {
@@ -487,11 +508,8 @@ new Vue({
     this.loadFromLocalStorage();
     this.checkNotificationPermission();
     this.timer = setInterval(this.updateTimer, 1000);
-    // 暴露到 window 以便在控制台或快捷指令桥接调用
-    if (typeof window !== 'undefined') {
-      window.getUpcomingNextTwoDays = () => this.getUpcomingNextTwoDays();
-      window.getUpcomingNextTwoDaysJSON = () => this.getUpcomingNextTwoDaysJSON();
-    }
+    // 初始化隐藏标签内容
+    this.updateUpcomingTodosHiddenTag();
   },
   beforeDestroy() {
     if (this.timer) {
@@ -502,12 +520,14 @@ new Vue({
     players: {
       handler() {
         this.saveToLocalStorage();
+        this.updateUpcomingTodosHiddenTag();
       },
       deep: true
     },
     playerRemarks: {
       handler() {
         this.saveToLocalStorage();
+        this.updateUpcomingTodosHiddenTag();
       },
       deep: true
     }
