@@ -335,7 +335,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "其他",
-					"clashNo": null
+					"clashNo": 1000035
 				},
 				{
 					"id": 829,
@@ -656,7 +656,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "防御",
-					"clashNo": null
+					"clashNo": 1000056
 				},
 				{
 					"id": 819,
@@ -716,7 +716,7 @@
 					"trainType": null,
 					"superType": 0,
 					"cocType": "防御",
-					"clashNo": null
+					"clashNo": 1000081
 				},
 				{
 					"id": 931,
