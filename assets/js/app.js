@@ -469,10 +469,15 @@ new Vue({
 
       const todos = [];
       const upgradingItems = this.AllUpgradingItems || [];
+      const nowMs = Date.now();
 
       upgradingItems.forEach(item => {
-        const endTimeMs = item.endTime;
-        if (endTimeMs < startMs || endTimeMs > endMs) return;
+        // 使用加速后的剩余时间计算完成时间（与显示保持一致）
+        // remainingTime 已经在 AllUpgradingItems 中应用了加速设置
+        const adjustedEndTimeMs = nowMs + item.remainingTime;
+        
+        // 判断是否在近两天内（基于加速后的完成时间）
+        if (adjustedEndTimeMs < startMs || adjustedEndTimeMs > endMs) return;
 
         // 更准确获取等级
         let level = item.lvl;
@@ -481,7 +486,7 @@ new Vue({
           if (src && src.lvl) level = src.lvl;
         } catch (e) { }
 
-        const endDateObj = new Date(endTimeMs);
+        const endDateObj = new Date(adjustedEndTimeMs);
 
         todos.push({
           title: `${item.playerName}的${item.categoryName}${item.displayName}Lv.${level || ''}升级完成`,
@@ -563,11 +568,13 @@ new Vue({
     speedUp10x: {
       handler() {
         this.saveToLocalStorage();
+        this.updateUpcomingTodosHiddenTag();
       }
     },
     speedUp24x: {
       handler() {
         this.saveToLocalStorage();
+        this.updateUpcomingTodosHiddenTag();
       }
     }
   }
