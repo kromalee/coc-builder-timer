@@ -15,6 +15,9 @@ new Vue({
       // 通知设置
       notificationEnabled: false,
       notificationPermission: 'default',
+      // 加速设置（仅用于主世界建筑和英雄的剩余时间计算）
+      speedUp10x: false,
+      speedUp24x: false,
       // 浏览器API引用
       window: window,
       categories: ['buildings', 'traps', 'decos', 'obstacles', 'units', 'siege_machines', 'heroes', 'spells', 'pets', 'equipment', 'buildings2', 'traps2', 'decos2', 'obstacles2', 'units2', 'heroes2'],
@@ -50,7 +53,17 @@ new Vue({
             gameData[category].forEach((item, index) => {
               if (item.timer) {
                 const endTime = gameData.timestamp * 1000 + item.timer * 1000;
-                const remainingTime = Math.max(0, endTime - this.currentTime);
+                let remainingTime = Math.max(0, endTime - this.currentTime);
+
+                // 应用加速（仅适用于主世界的建筑和英雄）
+                const isMainWorldBuildingOrHero = category === 'buildings' || category === 'heroes';
+                if (isMainWorldBuildingOrHero) {
+                  if (this.speedUp24x) {
+                    remainingTime = remainingTime / 24;
+                  } else if (this.speedUp10x) {
+                    remainingTime = remainingTime / 10;
+                  }
+                }
 
                 allItems.push({
                   id: `${playerTag}_${category}_${index}`,
@@ -199,12 +212,12 @@ new Vue({
     checkUpgradeCompletion() {
       if (!this.notificationEnabled) return;
 
-      const now = Date.now();
       const upgradingItems = this.AllUpgradingItems;
 
       upgradingItems.forEach(item => {
-        const completionTime = item.endTime;
-        const timeLeft = completionTime - now;
+        // 使用 AllUpgradingItems 中已计算好的 remainingTime（已应用加速设置）
+        // 这样通知触发时间与显示的剩余时间保持一致
+        const timeLeft = item.remainingTime;
 
         // 如果在5分钟内完成，发送即将完成通知
         if (timeLeft > 0 && timeLeft <= 300000 && !item.notificationSent) {
@@ -240,6 +253,18 @@ new Vue({
       } else {
         this.notificationEnabled = false;
         this.$message.info('通知已关闭');
+      }
+    },
+    // 切换10倍加速
+    toggleSpeedUp10x(value) {
+      if (value) {
+        this.speedUp24x = false;
+      }
+    },
+    // 切换24倍加速
+    toggleSpeedUp24x(value) {
+      if (value) {
+        this.speedUp10x = false;
       }
     },
 
@@ -374,6 +399,8 @@ new Vue({
         const data = {
           players: this.players,
           playerRemarks: this.playerRemarks,
+          speedUp10x: this.speedUp10x,
+          speedUp24x: this.speedUp24x,
           timestamp: Date.now()
         };
         localStorage.setItem('cocTimerData', JSON.stringify(data));
@@ -388,6 +415,8 @@ new Vue({
           const data = JSON.parse(savedData);
           this.players = data.players || {};
           this.playerRemarks = data.playerRemarks || {};
+          this.speedUp10x = data.speedUp10x || false;
+          this.speedUp24x = data.speedUp24x || false;
           this.$message.success('已从本地存储恢复数据');
         }
       } catch (error) {
@@ -530,6 +559,16 @@ new Vue({
         this.updateUpcomingTodosHiddenTag();
       },
       deep: true
+    },
+    speedUp10x: {
+      handler() {
+        this.saveToLocalStorage();
+      }
+    },
+    speedUp24x: {
+      handler() {
+        this.saveToLocalStorage();
+      }
     }
   }
 });

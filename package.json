@@ -1,6 +1,6 @@
 {
   "name": "coc-builder-timer",
-  "version": "251011124921",
+  "version": "251113181224",
   "description": "COC计时器",
   "scripts": {
     "update-version": "node scripts/update-version.js",
