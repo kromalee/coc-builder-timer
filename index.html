@@ -132,9 +132,13 @@
                                         </div>
                                     </el-col>
                                     <el-col style="text-align: right;">
-                                        <div
-                                            :style="{ fontWeight: '500', color: item.remainingTime <= 0 ? '#67c23a' : '#409eff' }">
-                                            {{ formatTime(item.remainingTime) }}
+                                        <div style="display: flex; justify-content: flex-end; align-items: center;">
+                                            <div :style="{ fontWeight: '500', color: '#e6a23c' }">
+                                                {{ formatDateTime(item.endTime) }}
+                                            </div>
+                                            <div style="width: 120px; text-align: right;" :style="{ fontWeight: '500', color: item.remainingTime <= 0 ? '#67c23a' : '#409eff' }">
+                                                {{ formatTime(item.remainingTime) }}
+                                            </div>
                                         </div>
                                     </el-col>
                                 </el-row>
