@@ -2998,6 +2998,21 @@
 					"superType": 0,
 					"cocType": "兵种",
 					"clashNo": "4000150"
+				},
+				{
+					"id": 994,
+					"name": "Meteor Golem",
+					"nameZh": "陨石哥伦",
+					"imgUrl": null,
+					"cocImgUrl": null,
+					"description": null,
+					"countryType": 0,
+					"type": 0,
+					"resourcesType": null,
+					"trainType": null,
+					"superType": 0,
+					"cocType": "兵种",
+					"clashNo": "4000177"
 				}
 			]
 		},
@@ -4435,6 +4450,21 @@
 					"superType": 0,
 					"cocType": "防御",
 					"clashNo": "1000085"
+				},
+				{
+					"id": 955,
+					"name": "Revenge Tower",
+					"nameZh": "复仇塔",
+					"imgUrl": null,
+					"cocImgUrl": null,
+					"description": null,
+					"countryType": 0,
+					"type": 1,
+					"resourcesType": null,
+					"trainType": null,
+					"superType": 0,
+					"cocType": "防御",
+					"clashNo": "1000086"
 				},
 				{
 					"id": 979,
