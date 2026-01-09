@@ -211,55 +211,6 @@
                 </el-row>
             </el-card>
 
-            <!-- 加速设置 -->
-            <el-card style="margin-bottom: 20px;">
-                <div slot="header">
-                    <i class="el-icon-time"></i> 加速设置
-                </div>
-                <el-row :gutter="20" type="flex" align="middle" style="margin-bottom: 15px;">
-                    <el-col :span="16">
-                        <div>
-                            <div style="font-weight: bold; margin-bottom: 4px;">10倍加速</div>
-                            <div style="font-size: 12px; color: #909399;">
-                                仅适用于主世界的建筑和英雄，计算剩余时间时使用（不影响实际时间流逝）
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :span="8" style="text-align: right;">
-                        <el-switch v-model="speedUp10x" @change="toggleSpeedUp10x"
-                            :disabled="speedUp24x"
-                            active-color="#13ce66" inactive-color="#ff4949">
-                        </el-switch>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20" type="flex" align="middle">
-                    <el-col :span="16">
-                        <div>
-                            <div style="font-weight: bold; margin-bottom: 4px;">24倍加速</div>
-                            <div style="font-size: 12px; color: #909399;">
-                                仅适用于主世界的建筑和英雄，计算剩余时间时使用（不影响实际时间流逝）
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :span="8" style="text-align: right;">
-                        <el-switch v-model="speedUp24x" @change="toggleSpeedUp24x"
-                            :disabled="speedUp10x"
-                            active-color="#13ce66" inactive-color="#ff4949">
-                        </el-switch>
-                    </el-col>
-                </el-row>
-                <el-row v-if="speedUp10x || speedUp24x" style="margin-top: 15px;">
-                    <el-col>
-                        <el-alert :title="`${speedUp24x ? '24' : '10'}倍加速已开启`" type="info" :closable="false" show-icon>
-                            <div slot="description">
-                                • 仅影响主世界建筑和英雄的剩余时间显示<br>
-                                • 不适用于宠物、兵种等其他类型<br>
-                                • 仅用于计算显示，不影响实际时间流逝
-                            </div>
-                        </el-alert>
-                    </el-col>
-                </el-row>
-            </el-card>
 
             <!-- 玩家管理 -->
             <el-card style="margin-bottom: 20px;">

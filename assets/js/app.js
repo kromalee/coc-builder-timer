@@ -15,9 +15,6 @@ new Vue({
       // 通知设置
       notificationEnabled: false,
       notificationPermission: 'default',
-      // 加速设置（仅用于主世界建筑和英雄的剩余时间计算）
-      speedUp10x: false,
-      speedUp24x: false,
       // 浏览器API引用
       window: window,
       categories: ['buildings', 'traps', 'decos', 'obstacles', 'units', 'siege_machines', 'heroes', 'spells', 'pets', 'equipment', 'buildings2', 'traps2', 'decos2', 'obstacles2', 'units2', 'heroes2'],
@@ -54,16 +51,6 @@ new Vue({
               if (item.timer) {
                 const endTime = gameData.timestamp * 1000 + item.timer * 1000;
                 let remainingTime = Math.max(0, endTime - this.currentTime);
-
-                // 应用加速（仅适用于主世界的建筑和英雄）
-                const isMainWorldBuildingOrHero = category === 'buildings' || category === 'heroes';
-                if (isMainWorldBuildingOrHero) {
-                  if (this.speedUp24x) {
-                    remainingTime = remainingTime / 24;
-                  } else if (this.speedUp10x) {
-                    remainingTime = remainingTime / 10;
-                  }
-                }
 
                 allItems.push({
                   id: `${playerTag}_${category}_${index}`,
@@ -215,7 +202,7 @@ new Vue({
       const upgradingItems = this.AllUpgradingItems;
 
       upgradingItems.forEach(item => {
-        // 使用 AllUpgradingItems 中已计算好的 remainingTime（已应用加速设置）
+        // 使用 AllUpgradingItems 中已计算好的 remainingTime
         // 这样通知触发时间与显示的剩余时间保持一致
         const timeLeft = item.remainingTime;
 
@@ -253,18 +240,6 @@ new Vue({
       } else {
         this.notificationEnabled = false;
         this.$message.info('通知已关闭');
-      }
-    },
-    // 切换10倍加速
-    toggleSpeedUp10x(value) {
-      if (value) {
-        this.speedUp24x = false;
-      }
-    },
-    // 切换24倍加速
-    toggleSpeedUp24x(value) {
-      if (value) {
-        this.speedUp10x = false;
       }
     },
 
@@ -399,8 +374,6 @@ new Vue({
         const data = {
           players: this.players,
           playerRemarks: this.playerRemarks,
-          speedUp10x: this.speedUp10x,
-          speedUp24x: this.speedUp24x,
           timestamp: Date.now()
         };
         localStorage.setItem('cocTimerData', JSON.stringify(data));
@@ -415,8 +388,6 @@ new Vue({
           const data = JSON.parse(savedData);
           this.players = data.players || {};
           this.playerRemarks = data.playerRemarks || {};
-          this.speedUp10x = data.speedUp10x || false;
-          this.speedUp24x = data.speedUp24x || false;
           this.$message.success('已从本地存储恢复数据');
         }
       } catch (error) {
@@ -472,11 +443,10 @@ new Vue({
       const nowMs = Date.now();
 
       upgradingItems.forEach(item => {
-        // 使用加速后的剩余时间计算完成时间（与显示保持一致）
-        // remainingTime 已经在 AllUpgradingItems 中应用了加速设置
+        // 使用剩余时间计算完成时间（与显示保持一致）
         const adjustedEndTimeMs = nowMs + item.remainingTime;
-        
-        // 判断是否在近两天内（基于加速后的完成时间）
+
+        // 判断是否在近两天内
         if (adjustedEndTimeMs < startMs || adjustedEndTimeMs > endMs) return;
 
         // 更准确获取等级
@@ -564,18 +534,6 @@ new Vue({
         this.updateUpcomingTodosHiddenTag();
       },
       deep: true
-    },
-    speedUp10x: {
-      handler() {
-        this.saveToLocalStorage();
-        this.updateUpcomingTodosHiddenTag();
-      }
-    },
-    speedUp24x: {
-      handler() {
-        this.saveToLocalStorage();
-        this.updateUpcomingTodosHiddenTag();
-      }
     }
   }
 });
