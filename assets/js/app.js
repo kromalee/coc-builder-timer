@@ -15,6 +15,8 @@ new Vue({
       // 通知设置
       notificationEnabled: false,
       notificationPermission: 'default',
+      // 显示设置
+      showMainWorldOnly: false,
       // 浏览器API引用
       window: window,
       categories: ['buildings', 'traps', 'decos', 'obstacles', 'units', 'siege_machines', 'heroes', 'spells', 'pets', 'equipment', 'buildings2', 'traps2', 'decos2', 'obstacles2', 'units2', 'heroes2'],
@@ -40,12 +42,20 @@ new Vue({
     };
   },
   computed: {
+    // 根据设置过滤分类列表
+    filteredCategories() {
+      if (this.showMainWorldOnly) {
+        // 仅显示主世界，过滤掉夜世界分类（以2结尾的）
+        return this.categories.filter(cat => !cat.endsWith('2'));
+      }
+      return this.categories;
+    },
     AllUpgradingItems() {
       const allItems = [];
       Object.keys(this.players).forEach(playerTag => {
         const gameData = this.players[playerTag];
 
-        this.categories.forEach(category => {
+        this.filteredCategories.forEach(category => {
           if (gameData[category]) {
             gameData[category].forEach((item, index) => {
               if (item.timer) {
@@ -349,7 +359,7 @@ new Vue({
 
     getPlayerUpgradingCount(gameData) {
       let count = 0;
-      this.categories.forEach(category => {
+      this.filteredCategories.forEach(category => {
         if (gameData[category]) {
           gameData[category].forEach(item => {
             if (item.timer) count++;
@@ -374,6 +384,7 @@ new Vue({
         const data = {
           players: this.players,
           playerRemarks: this.playerRemarks,
+          showMainWorldOnly: this.showMainWorldOnly,
           timestamp: Date.now()
         };
         localStorage.setItem('cocTimerData', JSON.stringify(data));
@@ -388,6 +399,9 @@ new Vue({
           const data = JSON.parse(savedData);
           this.players = data.players || {};
           this.playerRemarks = data.playerRemarks || {};
+          if (data.showMainWorldOnly !== undefined) {
+            this.showMainWorldOnly = data.showMainWorldOnly;
+          }
           this.$message.success('已从本地存储恢复数据');
         }
       } catch (error) {
@@ -534,6 +548,12 @@ new Vue({
         this.updateUpcomingTodosHiddenTag();
       },
       deep: true
+    },
+    showMainWorldOnly: {
+      handler() {
+        this.saveToLocalStorage();
+        this.updateUpcomingTodosHiddenTag();
+      }
     }
   }
 });
